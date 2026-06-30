@@ -1,0 +1,20 @@
+services:
+  frontend:
+    # Khi deploy: image được pull từ ghcr.io (CI/CD push sẵn)
+    # Khi dev local: chạy `docker compose build` trước
+    image: ${FRONTEND_IMAGE:-special-education-frontend:latest}
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: special-education-frontend
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
