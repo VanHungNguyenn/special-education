@@ -8,9 +8,13 @@
 | React | 19.2 |
 | TypeScript | 5 |
 | Tailwind CSS | 4 (qua `@tailwindcss/postcss`) |
-| Radix UI | alert-dialog, avatar, dialog, dropdown-menu, popover, select |
+| shadcn/ui | Style new-york trên `radix-ui`, cài qua CLI (`components.json`). Đã cài: alert-dialog, avatar, button, calendar, checkbox, dialog, dropdown-menu, input, label, popover, select, textarea |
+| lucide-react | Bộ icon |
+| cva, clsx, tailwind-merge, tw-animate-css | Thư viện đi kèm shadcn (variant, `cn()`, animation) |
 | date-fns, react-day-picker | Chọn ngày và tháng |
 | pnpm | Trình quản lý package, chạy trên Node 22 |
+| Font | Be Vietnam Pro (nội dung), Lora (tiêu đề), nạp qua `next/font/google` với subset `vietnamese` |
+| Playwright | Chụp ảnh kiểm tra giao diện (dev) |
 
 ## Cấu trúc thư mục
 
@@ -21,18 +25,23 @@ frontend/
 │   │   ├── layout.tsx          # Root layout, metadata (title = tên trung tâm), font
 │   │   ├── page.tsx            # Trang giới thiệu (server component)
 │   │   ├── globals.css         # CSS cho trang giới thiệu (biến CSS, đã minify)
-│   │   ├── tailwind.css        # Tailwind v4, theme tokens, CSS cho bản in
+│   │   ├── tailwind.css        # Tailwind v4, token màu thương hiệu, theme shadcn, CSS cho bản in
 │   │   ├── login/              # Trang đăng nhập (CSS module)
 │   │   └── portal/             # Cổng quản lý: page.tsx → portal.tsx (client)
 │   ├── components/
-│   │   ├── ui/                 # Wrapper cho Radix: button, dialog, select, date/month picker…
+│   │   ├── landing/            # Component client cho trang giới thiệu (menu mobile)
+│   │   ├── ui/                 # Chỉ chứa component shadcn/ui (sinh bằng CLI)
+│   │   ├── common/             # Component ghép từ shadcn: DatePicker, MonthPicker, form field
 │   │   └── school/             # App shell, danh sách lớp, học sinh, hồ sơ, báo cáo, modal
 │   ├── features/school/
 │   │   ├── types.ts            # Kiểu dữ liệu
 │   │   ├── data.ts             # Dữ liệu mẫu, tiêu chí đánh giá, các lựa chọn kết quả
 │   │   └── use-school-management.ts  # Hook giữ toàn bộ state của portal
+│   ├── lib/utils.ts            # cn() = clsx + tailwind-merge
 │   └── config/site.ts          # Thông tin trung tâm (đọc từ env)
 ├── docs/                       # Tài liệu này
+├── scripts/screenshot.mjs      # Chụp ảnh giao diện bằng Playwright
+├── components.json             # Cấu hình shadcn/ui
 ├── .env.example                # Mẫu biến môi trường
 └── Dockerfile
 ```
@@ -70,7 +79,8 @@ Dự án không dùng context, store hay API. Khi thêm backend, hook này là c
 
 ## Styling
 
-- **Portal và components:** Tailwind v4, được import với `important` trong `tailwind.css`. Các token gồm `brand-50…800` (xanh lá đậm), `coral-50/500`, `surface`, `shadow-card`. Các class `no-print`, `print-page`… điều khiển bản in báo cáo.
-- **Trang giới thiệu:** `globals.css`, dùng biến CSS (`--ink`, `--green`, `--cream`, `--coral`…).
+- **Portal và components:** Tailwind v4, được import với `important` trong `tailwind.css`. Các token gồm `brand-50…800` (xanh lá đậm), `coral-50/500/600`, `surface`, `shadow-card`. Các class `no-print`, `print-page`… điều khiển bản in báo cáo.
+- **Theme shadcn/ui:** khai báo bằng biến CSS (`--primary`, `--destructive`, `--border`, `--ring`, `--radius`…) trong `:root` của `tailwind.css`, map theo màu thương hiệu (primary `#1f5a4d`, destructive `#b84a33`, bo góc 7px). Muốn đổi màu component thì sửa ở đây, không sửa trong `components/ui/`. Xem [ui-guidelines.md](ui-guidelines.md#component-dùng-shadcnui-trước).
+- **Trang giới thiệu:** `globals.css`, dùng biến CSS (`--ink`, `--green`, `--cream`, `--coral`…). Chữ màu coral phải dùng `--coral-ink` (`#b84a33`) để đạt độ tương phản; `--coral` (`#ef765e`) chỉ dùng cho phần trang trí. Trong Tailwind, dùng `coral-600` cho nền có chữ trắng.
 - **Trang đăng nhập:** `login.module.css`.
-- Font: Aptos / Segoe UI, đặt qua biến `--font-sans` trong `layout.tsx`.
+- Font: `layout.tsx` nạp Be Vietnam Pro và Lora vào biến `--font-be-vietnam` và `--font-lora`. `--font-sans` và `--font-serif` (khai báo trong `tailwind.css` và `globals.css`) trỏ tới hai biến này.

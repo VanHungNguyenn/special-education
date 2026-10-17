@@ -15,6 +15,8 @@
 | [domain.md](domain.md) | Mô hình dữ liệu, tiêu chí đánh giá, quy trình phiếu đánh giá, quy tắc nghiệp vụ |
 | [configuration.md](configuration.md) | Biến môi trường, cách đổi tên trung tâm |
 | [deployment.md](deployment.md) | Docker, docker-compose, CI/CD GitHub Actions |
+| [ui-guidelines.md](ui-guidelines.md) | Quy ước giao diện: nút, xuống dòng tiếng Việt, card, section, màu, font |
+| [testing.md](testing.md) | Chụp ảnh kiểm tra giao diện bằng Playwright (`pnpm screenshot`) |
 | [RUNNING.md](../../RUNNING.md) | Hướng dẫn chạy nhanh (local và Docker) |
 
 ## Chạy nhanh
@@ -31,5 +33,6 @@ pnpm dev               # http://localhost:3000
 - **Đăng nhập giả lập:** form login không xác thực gì. Bấm đăng nhập là chuyển thẳng vào `/portal`. Tài khoản demo được điền sẵn (`giaovien@<domain>` / `demo2026`).
 - **Không có backend, không lưu dữ liệu:** toàn bộ dữ liệu là mock trong `src/features/school/data.ts` và chỉ nằm trong React state, nên tải lại trang là mất mọi thay đổi.
 - **Chưa phân quyền:** chưa có vai trò quản trị, giáo viên hay phụ huynh. Thông tin tài khoản trong menu đang cố định.
-- **Chưa có lint và test** trong `package.json`. Bước kiểm tra duy nhất hiện tại là `pnpm build`.
+- **Chưa có lint và unit test.** Hiện chỉ kiểm tra bằng `pnpm build` và chụp ảnh giao diện bằng `pnpm screenshot` (xem [testing.md](testing.md)).
+- Hình minh họa ở hero đang được vẽ bằng CSS, chỉ là tạm thời; nên thay bằng ảnh thật của trung tâm.
 - Tháng mặc định của phiếu đánh giá đang cố định là `2026-07`.

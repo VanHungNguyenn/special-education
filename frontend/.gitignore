@@ -44,3 +44,6 @@ next-env.d.ts
 # local agent tooling (skills)
 /.claude/
 /.codex/
+
+# playwright screenshots
+/screenshots/

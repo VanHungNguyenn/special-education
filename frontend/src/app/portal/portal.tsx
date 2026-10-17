@@ -9,7 +9,7 @@ import { ReportView } from "@/components/school/report-view";
 import { StudentList } from "@/components/school/student-list";
 import { StudentProfile } from "@/components/school/student-profile";
 import { Button } from "@/components/ui/button";
-import { Icon } from "@/components/ui/icon";
+import { Plus } from "lucide-react";
 import { useSchoolManagement } from "@/features/school/use-school-management";
 import type { ModalId, SchoolClass, Student, TabId } from "@/features/school/types";
 
@@ -52,7 +52,7 @@ const Portal = () => {
     setPendingDelete(null);
   };
 
-  const action = tab !== "reports" ? <Button icon={<Icon name="plus" className="size-4"/>} onClick={() => tab === "classes" ? openClassModal() : openStudentModal()}><span className="hidden sm:inline">Thêm {tab === "classes" ? "lớp" : "học sinh"}</span></Button> : undefined;
+  const action = tab !== "reports" ? <Button size="lg" onClick={() => tab === "classes" ? openClassModal() : openStudentModal()}><Plus/><span className="hidden sm:inline">Thêm {tab === "classes" ? "lớp" : "học sinh"}</span></Button> : undefined;
 
   return <AppShell tab={tab} onTabChange={changeTab}>
     <PageHeader title={titles[tab]} action={action}/>
