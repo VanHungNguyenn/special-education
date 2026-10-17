@@ -69,6 +69,20 @@
 
 @layer base {
   * { border-color: var(--border); }
+
+  /* Everything clickable shows a pointer (Tailwind v4 no longer does this for buttons). */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  select:not(:disabled),
+  summary,
+  label[for],
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled),
+  input[type="file"]:not(:disabled) { cursor: pointer; }
+
+  button:disabled,
+  select:disabled,
+  [aria-disabled="true"] { cursor: not-allowed; }
 }
 
 @media print {

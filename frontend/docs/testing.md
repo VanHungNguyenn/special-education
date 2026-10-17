@@ -31,6 +31,12 @@ Lần đầu trên máy mới, cài trình duyệt cho Playwright:
 pnpm exec playwright install chromium
 ```
 
+## Lưu ý: dev server và bản build dùng chung `.next`
+
+- **Không chạy `pnpm build` khi `pnpm dev` đang chạy.** Cả hai dùng chung thư mục `.next`. Build xong, HMR của dev server có thể bị lệch và tiếp tục phục vụ CSS cũ. Đã từng xảy ra: rule `cursor: pointer` có trong bản build nhưng không có trên dev server.
+- Luôn kiểm tra trên **đúng server mà người dùng đang xem** (thường là `pnpm dev`, cổng 3000). `pnpm screenshot` và `pnpm layout-check` mặc định chạy với `http://localhost:3000`.
+- Nếu thấy giao diện không đổi sau khi sửa CSS: chạy `touch` file CSS đó để HMR nạp lại, hoặc khởi động lại `pnpm dev`.
+
 ## Kiểm tra layout responsive
 
 ```bash
@@ -43,7 +49,8 @@ Lệnh này quét `/` và `/login` ở 19 độ rộng (320 → 1920px) và báo
 - tràn ngang;
 - phần tử bị đẩy ra ngoài mép màn hình;
 - hai khối cạnh nhau (chữ và hình, chữ và nút, các cột footer…) chồng lên nhau hoặc cách nhau dưới 24px;
-- hình trang trí đè lên chữ (vòng tròn và chấm ở trang login).
+- hình trang trí đè lên chữ (vòng tròn và chấm ở trang login);
+- phần tử bấm được (link, nút, mục menu/select, checkbox…) không hiện con trỏ `pointer`, kiểm tra trên `/`, `/login`, `/portal`, kể cả khi menu và select đang mở.
 
 Có lỗi thì lệnh kết thúc với exit code 1. Danh sách các cặp cần kiểm tra nằm trong `checks` ở `scripts/layout-check.mjs`. Trang dùng CSS module (login) phải dùng selector `[class*=tên]`, vì tên class bị băm (hash).
 

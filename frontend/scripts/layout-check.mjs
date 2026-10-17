@@ -58,6 +58,24 @@ for (const [path, pairs] of Object.entries(checks)) {
     await page.close();
   }
 }
+// Every clickable element must show the pointer cursor (checked at desktop width, including open menus/selects).
+const clickable = 'a[href], button:not(:disabled), [role="button"], [role="menuitem"], [role="option"], [role="combobox"], [role="checkbox"], select:not(:disabled), label[for]';
+const cursorPages = [
+  ["/", null], ["/login", null], ["/portal", null],
+  ["/portal", (page) => page.getByRole("button", { name: /Nguyễn Hà Linh/ }).click()],
+  ["/portal?tab=students", (page) => page.locator("main button[role=combobox]").first().click()],
+];
+for (const [path, open] of cursorPages) {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  await page.goto(new URL(path, base).href, { waitUntil: "networkidle" });
+  if (open) { await open(page); await page.waitForTimeout(300); }
+  const wrong = await page.evaluate((selector) => [...document.querySelectorAll(selector)]
+    .filter((el) => el.getBoundingClientRect().width && getComputedStyle(el).cursor !== "pointer")
+    .map((el) => `${el.tagName.toLowerCase()}${el.getAttribute("role") ? `[role=${el.getAttribute("role")}]` : ""} "${(el.textContent || el.getAttribute("aria-label") || "").trim().slice(0, 24)}"`), clickable);
+  if (wrong.length) { problems += wrong.length; console.log(`✗ cursor ${path}${open ? " (opened)" : ""}: ${[...new Set(wrong)].join(" | ")}`); }
+  await page.close();
+}
+
 await browser.close();
-console.log(`\nChecked ${Object.keys(checks).length} pages × ${widths.length} widths (${problems} problem${problems === 1 ? "" : "s"})`);
+console.log(`\nChecked ${Object.keys(checks).length} pages × ${widths.length} widths + cursors (${problems} problem${problems === 1 ? "" : "s"})`);
 process.exitCode = problems ? 1 : 0;

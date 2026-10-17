@@ -31,7 +31,12 @@ Các quy tắc dưới đây được chốt qua những lần review landing pa
    - Ô nhập, select và nút trong form cao 44px: `h-11`. Riêng `SelectTrigger` phải dùng `data-[size=default]:h-11`.
    - Nút hành động chính dùng `size="lg"`.
    - Nút chỉ có icon dùng `size="icon"` và luôn có `aria-label`.
-7. **Đã cài:** alert-dialog, avatar, button, calendar, checkbox, dialog, dropdown-menu, input, label, popover, select, textarea.
+7. **Con trỏ chuột:** mọi chỗ bấm được (nút, link, mục menu, mục select, checkbox, label của checkbox…) đều phải hiện con trỏ hình bàn tay (`cursor: pointer`). Phần tử bị disabled dùng `not-allowed`.
+   - Tailwind v4 không còn tự đặt `pointer` cho `button`. Rule chung nằm trong `@layer base` của `tailwind.css`.
+   - shadcn đặt `cursor-default` cho mục menu và select. Utility này có `!important`, nên CSS chung không ghi đè được. Vì vậy trong `components/ui/dropdown-menu.tsx` và `select.tsx` đã đổi `cursor-default` → `cursor-pointer`. **Khi cài lại hoặc cài thêm component shadcn, kiểm tra và đổi tương tự.**
+   - Phần tử tự làm cho bấm được (`div`/`tr` có `onClick`) phải có class `cursor-pointer`. Nếu được thì dùng `Button` hoặc `role="button"` thay vì `div`.
+   - `pnpm layout-check` kiểm tra con trỏ trên `/`, `/login`, `/portal`, kể cả khi menu tài khoản và select đang mở.
+8. **Đã cài:** alert-dialog, avatar, button, calendar, checkbox, dialog, dropdown-menu, input, label, popover, select, textarea.
 
 ## Logo
 
