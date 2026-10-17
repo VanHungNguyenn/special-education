@@ -1,0 +1,13 @@
+node_modules
+.next
+.git
+.gitignore
+*.md
+*.png
+*.jpg
+.env*
+.DS_Store
+coverage
+.pnpm-store
+.claude
+.codex

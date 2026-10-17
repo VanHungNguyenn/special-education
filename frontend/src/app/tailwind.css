@@ -1,0 +1,24 @@
+@import "tailwindcss" important;
+
+@theme {
+  --color-brand-50: #f2f7f5;
+  --color-brand-100: #dceae4;
+  --color-brand-200: #bdd6cd;
+  --color-brand-500: #2c675a;
+  --color-brand-600: #1f5a4d;
+  --color-brand-700: #194f43;
+  --color-brand-800: #173f36;
+  --color-coral-50: #fff4f1;
+  --color-coral-500: #ed7b63;
+  --color-surface: #f5f6f3;
+  --font-sans: Aptos, "Segoe UI Variable", "Segoe UI", Arial, sans-serif;
+  --shadow-card: 0 10px 30px rgb(37 75 65 / 0.07);
+}
+
+@media print {
+  .no-print { display: none !important; }
+  .print-page { border: 0 !important; padding: 0 !important; }
+  .report-mobile { display: none !important; }
+  .report-table { display: table !important; }
+  .dashboard-main { margin-left: 0 !important; width: 100% !important; padding: 0 !important; }
+}

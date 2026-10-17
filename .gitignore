@@ -1,0 +1,17 @@
+# dependencies / package store
+node_modules/
+.pnpm-store/
+
+# env files
+.env*
+!.env.example
+
+# local browser profiles, agent tooling
+.edge-responsive-check/
+.agents/
+.claude/settings.local.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
