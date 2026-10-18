@@ -23,5 +23,5 @@ type SelectFieldProps = { label: string; name?: string; value?: string; defaultV
 
 export const SelectField = ({ label, children, ...props }: SelectFieldProps) => {
   const id = useId();
-  return <div className="grid gap-2"><Label htmlFor={id} className={labelClass}>{label}</Label><Select {...props}><SelectTrigger id={id} className="w-full data-[size=default]:h-11"><SelectValue/></SelectTrigger><SelectContent>{children}</SelectContent></Select></div>;
+  return <div className="grid gap-2"><Label htmlFor={id} className={labelClass}>{label}</Label><Select {...props}><SelectTrigger id={id} className="w-full data-[size=default]:h-11"><SelectValue/></SelectTrigger><SelectContent position="popper">{children}</SelectContent></Select></div>;
 };
