@@ -1,4 +1,4 @@
-import type { SchoolClass, Student } from "./types";
+import type { EvaluationStatus, SchoolClass, Student } from "./types";
 
 export const initialClasses: SchoolClass[] = [
   { id: 1, name: "Lớp Mầm Xanh", teacher: "Nguyễn Hà Linh", note: "Tập trung phát triển giao tiếp và kỹ năng tự phục vụ." },
@@ -33,3 +33,9 @@ export const resultOptions = [
   { value: "+/-", label: "+/-  Thực hiện cần trợ giúp" },
   { value: "-", label: "-  Chưa hoàn thành" },
 ] as const;
+
+export const statusMeta: Record<EvaluationStatus, { label: string; className: string }> = {
+  draft: { label: "Bản nháp", className: "bg-amber-50 text-amber-700 ring-amber-200" },
+  updated: { label: "Đã cập nhật", className: "bg-blue-50 text-blue-700 ring-blue-200" },
+  locked: { label: "Đã hoàn thành", className: "bg-brand-50 text-brand-700 ring-brand-200" },
+};

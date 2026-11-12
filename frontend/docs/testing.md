@@ -56,6 +56,16 @@ Có lỗi thì lệnh kết thúc với exit code 1. Danh sách các cặp cần
 
 Nên chạy `layout-check` trước, rồi `screenshot` để xem bằng mắt ở những độ rộng bị báo lỗi.
 
+## Kiểm tra trợ năng và vùng chạm
+
+```bash
+pnpm a11y-check                         # mặc định http://localhost:3000
+```
+
+Chạy mọi trang (landing, login, 3 tab portal, hồ sơ học sinh) ở 375, 768, 1024 (cảm ứng và chuột) và 1440. Lệnh báo lỗi khi gặp: vùng chạm nhỏ hơn 44px (thiết bị cảm ứng) hoặc 24px (chuột), chữ không đạt tương phản 4.5:1 (chữ lớn 3:1), chữ nhỏ hơn 12px, chữ bị cắt "…", hoặc trang bị cuộn ngang. Ngoài ra lệnh kiểm tra cả hành vi: mở hồ sơ bằng phím Enter, nhãn của các ô, chặn lưu khi thiếu ngày sinh, vòng focus. Có lỗi thì kết thúc với exit code 1.
+
+Unit test cho helper trong `src/lib/utils.ts`: `pnpm test` (dùng `node:test`, không cần server).
+
 ## Kết quả
 
 - Ảnh full-page được lưu ở `frontend/screenshots/<trang>-<độ rộng>.png`, ví dụ `home-375.png`, `portal-1440.png`. Thư mục này đã nằm trong `.gitignore`.

@@ -2,12 +2,15 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@12.18.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "screenshot": "node scripts/screenshot.mjs",
-    "layout-check": "node scripts/layout-check.mjs"
+    "layout-check": "node scripts/layout-check.mjs",
+    "a11y-check": "node scripts/a11y-check.mjs",
+    "test": "node --test scripts/"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

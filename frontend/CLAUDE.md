@@ -13,9 +13,11 @@ pnpm build    # type-check + build; run it after changes
 pnpm start
 pnpm screenshot   # Playwright screenshots of /, /login, /portal at 375/768/1440 (needs a running server)
 pnpm layout-check # overlap / tight-gap / overflow check of / and /login at 19 widths (needs a running server)
+pnpm a11y-check   # touch targets, contrast, text size, labels, keyboard on all pages at 375/768/1024/1440 (needs a running server)
+pnpm test         # unit tests (node:test) for helpers in src/lib
 ```
 
-The project has no lint or unit tests yet. After UI changes, run `pnpm screenshot` and look at the PNGs in `screenshots/`; see [docs/testing.md](docs/testing.md). Run Docker from the repo root (`..`) with `docker compose up --build`. CI/CD lives in `../.github/workflows/deploy.yml`.
+There is no lint yet; unit tests cover only the helpers in `src/lib/utils.ts`. After UI changes, run `pnpm a11y-check` and `pnpm screenshot` and look at the PNGs in `screenshots/`; see [docs/testing.md](docs/testing.md). Run Docker from the repo root (`..`) with `docker compose up --build`. CI/CD lives in `../.github/workflows/deploy.yml`.
 
 ## Architecture
 
@@ -23,7 +25,7 @@ The project has no lint or unit tests yet. After UI changes, run `pnpm screensho
 - Routes:
   - `src/app/page.tsx`: the landing page. A server component styled with `globals.css`.
   - `src/app/login/page.tsx`: a **mock** login. Any submit redirects to `/portal`, and no auth happens.
-  - `src/app/portal/`: one client page (`portal.tsx`) with three tabs: `classes`, `students`, `reports`. It reads the deep links `?tab=` and `?student=<id>` once, on mount.
+  - `src/app/portal/`: one client page (`page.tsx`) with three tabs: `classes`, `students`, `reports`. It reads the deep links `?tab=` and `?student=<id>` once, on mount.
 - State: all portal state lives in `useSchoolManagement` (`src/features/school/use-school-management.ts`), seeded from the mock data in `src/features/school/data.ts`. The app has **no backend and no persistence**, so a reload resets everything.
 - Folders:
   - `src/components/ui/`: **shadcn/ui components only** (new-york style on Radix, configured in `components.json`).

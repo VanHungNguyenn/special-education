@@ -27,7 +27,7 @@ frontend/
 │   │   ├── globals.css         # CSS cho trang giới thiệu (biến CSS, đã minify)
 │   │   ├── tailwind.css        # Tailwind v4, token màu thương hiệu, theme shadcn, CSS cho bản in
 │   │   ├── login/              # Trang đăng nhập (CSS module)
-│   │   └── portal/             # Cổng quản lý: page.tsx → portal.tsx (client)
+│   │   └── portal/             # Cổng quản lý: page.tsx (client)
 │   ├── components/
 │   │   ├── landing/            # Component client cho trang giới thiệu (menu mobile)
 │   │   ├── ui/                 # Chỉ chứa component shadcn/ui (sinh bằng CLI)
@@ -56,7 +56,7 @@ frontend/
 
 ### Cổng quản lý (`/portal`)
 
-`portal.tsx` điều phối toàn bộ màn hình bên trong `AppShell`. Trên desktop đó là sidebar, trên mobile là thanh tab ở dưới cùng.
+`portal/page.tsx` điều phối toàn bộ màn hình bên trong `AppShell`. Trên desktop đó là sidebar, trên mobile là thanh tab ở dưới cùng.
 
 - **Lớp học** (`classes`), dùng `ClassOverview`: hiển thị thẻ lớp kèm số học sinh, cho phép thêm, sửa, xóa lớp. Bấm vào một lớp để xem học sinh của lớp đó.
 - **Học sinh** (`students`): `StudentList` (tìm theo tên, lọc theo lớp) dẫn tới `StudentProfile` (thông tin học sinh và phiếu đánh giá theo tháng).
@@ -68,7 +68,7 @@ Việc thêm và sửa lớp hay học sinh dùng chung `EntityModal`. Việc x�
 
 ## Quản lý state
 
-Toàn bộ state nằm trong hook `useSchoolManagement`. Hook được gọi một lần trong `portal.tsx` và truyền xuống các component qua props.
+Toàn bộ state nằm trong hook `useSchoolManagement`. Hook được gọi một lần trong `portal/page.tsx` và truyền xuống các component qua props.
 
 - `classes`, `students`: khởi tạo từ `initialClasses` và `initialStudents`.
 - `evaluations`, `evaluationStatuses`: phiếu đánh giá và trạng thái của phiếu (xem [domain.md](domain.md)).
