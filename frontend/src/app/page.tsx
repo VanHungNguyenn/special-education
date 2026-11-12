@@ -31,7 +31,7 @@ const Mark = ({ name }: { name: string }) => {
   return <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>{paths[name]}</svg>;
 };
 
-const Home = () => <main>
+const Home = () => <>
   <a className="skipLink" href="#content">Bỏ qua đến nội dung</a>
   <header className="siteHeader">
     <BrandLogo/>
@@ -39,6 +39,7 @@ const Home = () => <main>
     <div className="headerActions"><Button asChild className="h-11 px-5 font-bold max-[620px]:h-10 max-[620px]:px-3.5"><Link href="/login">Đăng nhập</Link></Button><MobileNav links={navLinks}/></div>
   </header>
 
+  <main>
   <section className="hero" id="content">
     <div className="heroCopy">
       <div className="eyebrow"><span/><span className="nameFull">{siteConfig.name.replace(/ (\S+)$/, "\u00a0$1")}</span><span className="nameShort">{keep(`Trung tâm ${siteConfig.shortName}`)}</span></div>
@@ -47,7 +48,7 @@ const Home = () => <main>
       <div className="heroButtons"><Button asChild size="lg" className="h-12 px-6 font-bold"><a href="#programs">Khám phá chương trình</a></Button><a className="playLink" href="#community">Xem một ngày tại {siteConfig.shortName}</a></div>
       <div className="trustRow"><span><Mark name="check"/>Kế hoạch giáo dục cá nhân</span><span><Mark name="check"/>Can thiệp 1–1</span><span><Mark name="check"/>Phối hợp cùng phụ huynh</span></div>
     </div>
-    <div className="heroArt" aria-label={`Giáo viên đồng hành cùng trẻ tại Trung tâm ${siteConfig.shortName}`}>
+    <div className="heroArt" role="img" aria-label={`Giáo viên đồng hành cùng trẻ tại Trung tâm ${siteConfig.shortName}`}>
       <div className="sunDoodle"><Mark name="sparkle"/></div><div className="shape arch"/><div className="shape dotGrid"/><div className="photoFrame"><div className="portrait"><span className="hair"/><span className="face">˘‿˘</span><span className="shirt"/><span className="paper"><Mark name="heart"/></span></div></div>
       <div className="quoteCard"><span className="quoteMark">“</span><p>Mỗi {keep("tiến bộ")} của trẻ, dù {keep("nhỏ bé")}, đều là một niềm vui đáng {keep("trân trọng.")}</p><strong>— {keep(`Trung tâm ${siteConfig.shortName}`)}</strong></div>
     </div>
@@ -60,7 +61,8 @@ const Home = () => <main>
   <section className="community" id="community"><div><p className="eyebrow">Một ngày học tập tại {keep(siteConfig.shortName)}</p><h2>Học qua chơi, {keep("tiến bộ")} qua từng {keep("hoạt động.")}</h2><p>Trẻ được đón tiếp vui vẻ, khởi động bằng âm nhạc và vận động, tham gia hoạt động nhóm, học cá nhân 1–1, rèn kỹ năng tự phục vụ và vui chơi theo sở thích. Cuối ngày, giáo viên ghi nhận tiến bộ và trao đổi trực tiếp với phụ huynh.</p></div><div className="momentCard"><div className="momentIllustration"><span><Mark name="sun"/></span><b>Mỗi {keep("tiến bộ")} là một {keep("niềm vui.")}</b></div></div></section>
 
   <section className="visit" id="visit"><div><p className="eyebrow">{keep("Đồng hành")} cùng trẻ {keep("mỗi ngày")}</p><h2>Cùng con {keep("xây dựng")} {keep("hành trình")} {keep("phát triển")} {keep("phù hợp.")}</h2><p>Gặp gỡ giáo viên, tìm hiểu hoạt động và chia sẻ những điều gia đình đang quan tâm về trẻ.</p></div><Button asChild size="lg" className="h-12 min-w-44 bg-white px-6 font-bold text-primary hover:bg-[#efbd55] hover:text-primary"><a href="#programs">Xem chương trình</a></Button></section>
+  </main>
   <footer><BrandLogo tone="light" size="sm"/><p>Kiên nhẫn – Yêu thương – Thấu hiểu.</p><span>© 2026 {siteConfig.name}</span></footer>
-</main>;
+</>;
 
 export default Home;

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { fold } from "@/lib/utils";
 import { initialClasses, initialStudents } from "./data";
 import type { Evaluations, EvaluationStatuses, Rating, SchoolClass, Student } from "./types";
 
@@ -13,7 +14,7 @@ export const useSchoolManagement = () => {
 
   const filteredStudents = useMemo(() => students.filter((student) =>
     (classFilter === "all" || student.classId === Number(classFilter)) &&
-    student.name.toLowerCase().includes(query.toLowerCase())
+    fold(student.name).includes(fold(query.trim()))
   ), [students, classFilter, query]);
 
   const saveClass = (value: SchoolClass) => setClasses((items) =>

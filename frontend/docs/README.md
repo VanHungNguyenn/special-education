@@ -33,6 +33,6 @@ pnpm dev               # http://localhost:3000
 - **Đăng nhập giả lập:** form login không xác thực gì. Bấm đăng nhập là chuyển thẳng vào `/portal`. Tài khoản demo được điền sẵn (`giaovien@<domain>` / `demo2026`).
 - **Không có backend, không lưu dữ liệu:** toàn bộ dữ liệu là mock trong `src/features/school/data.ts` và chỉ nằm trong React state, nên tải lại trang là mất mọi thay đổi.
 - **Chưa phân quyền:** chưa có vai trò quản trị, giáo viên hay phụ huynh. Thông tin tài khoản trong menu đang cố định.
-- **Chưa có lint và unit test.** Hiện chỉ kiểm tra bằng `pnpm build` và chụp ảnh giao diện bằng `pnpm screenshot` (xem [testing.md](testing.md)).
+- **Chưa có lint; unit test mới chỉ có cho các helper trong `src/lib/utils.ts` (`pnpm test`).** Giao diện được kiểm tra bằng `pnpm build`, `pnpm a11y-check` và `pnpm screenshot` (xem [testing.md](testing.md)).
 - Hình minh họa ở hero đang được vẽ bằng CSS, chỉ là tạm thời; nên thay bằng ảnh thật của trung tâm.
 - Tháng mặc định của phiếu đánh giá đang cố định là `2026-07`.

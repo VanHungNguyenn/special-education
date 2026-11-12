@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Lock } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { BrandLogo } from "@/components/common/brand-logo";
 import { Button } from "@/components/ui/button";
@@ -38,17 +39,17 @@ const LoginPage = () => {
       <section className={styles.formSide}>
         <div className={styles.formBox}>
           <Link className={styles.back} href="/">← Về trang chủ</Link>
-          <span className={`brandMark ${styles.mobileMark}`}>{siteConfig.initial}</span>
+          <span className={`brandMark ${styles.mobileMark}`} aria-hidden>{siteConfig.initial}</span>
           <h2>Chào mừng {"cô/thầy\u00a0trở\u00a0lại"}</h2>
           <p>Đăng nhập để tiếp tục vào cổng quản lý học sinh.</p>
           <form onSubmit={handleSubmit}>
             <div className={styles.field}><Label htmlFor="email">Email nhà trường</Label><Input id="email" type="email" className="h-12 bg-white text-[15px]" defaultValue={`giaovien@${siteConfig.emailDomain}`} placeholder={`ten@${siteConfig.emailDomain}`} required autoComplete="email"/></div>
             <div className={styles.field}><Label htmlFor="password">Mật khẩu</Label><div className="relative"><Input id="password" type={showPassword ? "text" : "password"} className="h-12 bg-white pr-16 text-[15px]" defaultValue="demo2026" required autoComplete="current-password"/><Button type="button" variant="ghost" size="sm" className="absolute right-2 top-1/2 -translate-y-1/2 font-bold text-brand-600" aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"} onClick={() => setShowPassword(value => !value)}>{showPassword ? "Ẩn" : "Hiện"}</Button></div></div>
-            <div className={styles.options}><div className="flex items-center gap-2"><Checkbox id="remember" defaultChecked/><Label htmlFor="remember" className="font-normal text-[#6c7e78]">Ghi nhớ đăng nhập</Label></div><a href="#">Quên mật khẩu?</a></div>
+            <div className={styles.options}><div className="flex items-center gap-2"><Checkbox id="remember" defaultChecked/><Label htmlFor="remember" className="min-h-11 font-normal text-[#586b65]">Ghi nhớ đăng nhập</Label></div><a href="#help">Quên mật khẩu?</a></div>
             <Button type="submit" size="lg" className="h-12 w-full text-[15px] font-bold" disabled={loading}>{loading ? "Đang đăng nhập…" : "Đăng nhập"}</Button>
           </form>
-          <div className={styles.help}><span>?</span><p><strong>Không thể đăng nhập?</strong><br/>Vui lòng liên hệ quản trị viên của Trung tâm {siteConfig.shortName}.</p></div>
-          <small className={styles.security}>🔒 Dữ liệu học sinh được bảo mật và chỉ dành cho người được phân quyền.</small>
+          <div id="help" className={styles.help}><span>?</span><p><strong>Không thể đăng nhập?</strong><br/>Vui lòng liên hệ quản trị viên của Trung tâm {siteConfig.shortName}.</p></div>
+          <small className={styles.security}><Lock className="mr-1 inline size-3.5 align-[-2px]"/>Dữ liệu học sinh được bảo mật và chỉ dành cho người được phân quyền.</small>
         </div>
       </section>
     </main>

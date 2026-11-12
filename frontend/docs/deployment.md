@@ -20,9 +20,7 @@ docker compose down              # dừng
 
 ## CI/CD (`.github/workflows/deploy.yml`)
 
-Workflow chạy khi push lên nhánh **`main`** có thay đổi trong `frontend/**`, `docker-compose.yml` hoặc chính file workflow. Cũng có thể chạy tay (`workflow_dispatch`).
-
-> Lưu ý: repo hiện dùng nhánh `master`. Cần đổi tên nhánh hoặc sửa trigger thì workflow mới chạy.
+Workflow chạy khi push lên nhánh **`master`** có thay đổi trong `frontend/**`, `docker-compose.yml` hoặc chính file workflow. Cũng có thể chạy tay (`workflow_dispatch`).
 
 1. **build:** build image từ `./frontend` rồi push lên `ghcr.io/<owner>/special-education-frontend`, gắn tag `sha-<short>` và `latest` (với nhánh mặc định). Bước này dùng cache của GitHub Actions.
 2. **deploy** (environment `production`): copy `docker-compose.yml` lên server vào `/opt/special-education`, rồi SSH vào server để chạy lần lượt: login GHCR, `docker compose pull`, `docker compose up -d --no-build`, `docker image prune -f`.

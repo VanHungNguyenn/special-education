@@ -5,7 +5,7 @@ import { siteConfig } from "@/config/site";
 // tone="light" for dark backgrounds, size="sm" for the footer.
 export const BrandLogo = ({ tone = "dark", size = "md", className = "" }: { tone?: "dark" | "light"; size?: "md" | "sm"; className?: string }) => (
   <Link className={`brand ${tone === "light" ? "light" : ""} ${size === "sm" ? "inverse" : ""} ${className}`} href="/">
-    <span className="brandMark">{siteConfig.initial}</span>
+    <span className="brandMark" aria-hidden>{siteConfig.initial}</span>
     <span>{siteConfig.shortName}<span className="brandSub">{"Giáo dục trẻ đặc biệt".replaceAll(" ", "\u00a0")}</span></span>
   </Link>
 );

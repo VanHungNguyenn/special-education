@@ -21,6 +21,17 @@ Truy cập: http://localhost:3000
 
 ## 2. Chạy bằng Docker
 
+### Cách nhanh nhất
+
+```bash
+./docker.sh            # build và chạy nền (= up)
+./docker.sh logs       # xem log
+./docker.sh status     # trạng thái container
+./docker.sh restart    # build lại và chạy lại
+./docker.sh down       # dừng
+PORT=8080 ./docker.sh  # chạy ở cổng khác
+```
+
 ### Build và chạy một lệnh
 
 ```bash

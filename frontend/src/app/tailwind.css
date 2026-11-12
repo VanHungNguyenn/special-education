@@ -69,6 +69,8 @@
 
 @layer base {
   * { border-color: var(--border); }
+  /* With viewport-fit=cover, keep content out of the notch on landscape phones. */
+  body { padding-inline: env(safe-area-inset-left) env(safe-area-inset-right); }
 
   /* Portal only: keep the scrollbar space reserved so the layout doesn't shift when page height
      changes or a Radix Select/Dialog locks scroll. The gutter already covers that space, so drop the
@@ -85,6 +87,15 @@
   input[type="checkbox"]:not(:disabled),
   input[type="radio"]:not(:disabled),
   input[type="file"]:not(:disabled) { cursor: pointer; }
+
+  /* shadcn draws focus as ring-ring/50, which is only 2.25:1 on white; force the full-strength ring (WCAG 1.4.11 needs 3:1). */
+  [data-slot]:focus-visible { --tw-ring-color: var(--ring) !important; }
+
+  /* Touch devices (phones, tablets, iPad in landscape too) get 44px targets; a desktop with a mouse keeps the compact sizes. */
+  @media (pointer: coarse) {
+    [data-slot="button"], [data-slot="select-trigger"], [data-slot="dialog-close"] { min-height: 44px; }
+    [data-slot="button"][data-size^="icon"], [data-slot="dialog-close"] { min-width: 44px; }
+  }
 
   button:disabled,
   select:disabled,
