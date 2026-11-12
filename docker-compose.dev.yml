@@ -1,0 +1,20 @@
+name: special-education-dev
+# Dev mode: code is mounted from ./frontend, so saving a file reloads the page (pnpm dev).
+# Run: ./docker.sh dev
+services:
+  frontend-dev:
+    image: node:22-alpine
+    container_name: special-education-frontend-dev
+    working_dir: /app
+    command: sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm dev -H 0.0.0.0 --webpack"
+    ports:
+      - "${PORT:-3000}:3000"
+    volumes:
+      - ./frontend:/app
+      # Keep the container's own node_modules/.next: host binaries (glibc) don't run on alpine (musl).
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+      # File change events don't always cross the Docker Desktop VM; polling makes reload reliable.
+      - WATCHPACK_POLLING=true
