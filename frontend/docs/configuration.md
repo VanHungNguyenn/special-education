@@ -2,14 +2,13 @@
 
 ## Thông tin trung tâm
 
-Vì mã nguồn được dùng chung, tên trung tâm **không được viết cứng** trong code. Mọi chỗ hiển thị tên, chữ cái logo hay domain email đều đọc từ `siteConfig` (`src/config/site.ts`). Các giá trị này lấy từ biến môi trường:
+Vì mã nguồn được dùng chung, tên trung tâm **không được viết cứng** trong code. Mọi chỗ hiển thị tên hay chữ cái logo đều đọc từ `siteConfig` (`src/config/site.ts`). Các giá trị này lấy từ biến môi trường:
 
 | Biến | Giá trị tạm thời | Dùng ở đâu |
 |---|---|---|
 | `NEXT_PUBLIC_CENTER_NAME` | `Trung tâm Giáo dục Trẻ Đặc Biệt ABC` | Tiêu đề trang (metadata), hero, footer |
 | `NEXT_PUBLIC_CENTER_SHORT_NAME` | `ABC` | Logo chữ, menu, câu trích dẫn, header báo cáo (viết hoa) |
 | `NEXT_PUBLIC_CENTER_INITIAL` | `A` | Ô logo tròn |
-| `NEXT_PUBLIC_CENTER_EMAIL_DOMAIN` | `example.edu.vn` | Email demo ở trang đăng nhập và menu tài khoản |
 
 Các file liên quan:
 

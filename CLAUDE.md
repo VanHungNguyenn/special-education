@@ -52,7 +52,7 @@ UI checks (`pnpm a11y-check`, `pnpm layout-check`, `pnpm screenshot`) need a run
 ## Repo-wide rules
 
 - All user-facing text is Vietnamese.
-- Never hard-code the center's name/short name/initial/email domain. FE reads them from `NEXT_PUBLIC_CENTER_*` via `siteConfig`; the backend should take them from config/env too (the sample PDF says "Tâm Anh"; do not copy that).
+- Never hard-code the center's name/short name/initial. Login uses each person's own email (no school email domain). FE reads them from `NEXT_PUBLIC_CENTER_*` via `siteConfig`; the backend should take them from config/env too (the sample PDF says "Tâm Anh"; do not copy that).
 - Evaluation status flow is `draft → updated → locked`; a locked evaluation can't be edited. A class with students can't be deleted. Enforce both server-side once the backend exists.
 - Criteria are referenced by **array index** in `data.ts`. Reordering them corrupts stored ratings; the backend should use stable criterion IDs.
 - No code comments unless asked (user preference).

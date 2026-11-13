@@ -47,7 +47,7 @@ FE đã chặn các trường hợp này trên giao diện, nhưng BE vẫn ph�
 
 ## 4. Cấu hình
 
-- Tên trung tâm, tên ngắn và domain email không được viết cứng. FE lấy từ `NEXT_PUBLIC_CENTER_*` ([frontend/docs/configuration.md](../frontend/docs/configuration.md)). File báo cáo do BE tạo cũng cần đọc các giá trị này từ cấu hình.
+- Tên trung tâm và tên ngắn không được viết cứng. FE lấy từ `NEXT_PUBLIC_CENTER_*` ([frontend/docs/configuration.md](../frontend/docs/configuration.md)). File báo cáo do BE tạo cũng cần đọc các giá trị này từ cấu hình.
 - Biến `NEXT_PUBLIC_*` được nhúng vào lúc build FE. Nếu FE cần biết URL của API thì cũng phải truyền lúc build, hoặc gọi qua cùng domain bằng reverse proxy / rewrite của Next.
 
 ## 5. Triển khai

@@ -39,7 +39,7 @@ There is no lint yet. Unit tests import `.ts` files directly with Node's type st
   - `src/components/landing/`: client components for the landing page (`MobileNav`).
   - `src/components/school/`: domain views (app shell, class overview, student list and profile, report, entity modal).
   - `src/features/school/`: types, mock data, evaluation criteria, and the state hook.
-  - `src/config/site.ts`: center identity (name, short name, logo initial, email domain).
+  - `src/config/site.ts`: center identity (name, short name, logo initial).
   - `src/lib/utils.ts`: `cn()` (clsx + tailwind-merge). Icons come from `lucide-react`.
 
 ## Domain rules (enforced in code)
@@ -51,7 +51,7 @@ There is no lint yet. Unit tests import `.ts` files directly with Node's type st
 ## Conventions
 
 - **UI components: use shadcn/ui first.** Install with `pnpm dlx shadcn@latest add <name>` and use it; never hand-write a component shadcn provides. Theme colors are CSS variables in `src/app/tailwind.css`, so don't restyle inside `components/ui/` (use `className` at the call site). After `add`, check that imports use `@/lib/utils` (the CLI once generated `from "cn"` and installed a stray `cn` package). Details: [docs/ui-guidelines.md](docs/ui-guidelines.md).
-- **Never hard-code the center name, short name, logo initial, or email domain.** Import `siteConfig` from `@/config/site`. Its values come from the `NEXT_PUBLIC_CENTER_*` variables in `.env` (see `.env.example`). The name is a placeholder ("ABC") and will be replaced later.
+- **Never hard-code the center name, short name, or logo initial.** Import `siteConfig` from `@/config/site`. Its values come from the `NEXT_PUBLIC_CENTER_*` variables in `.env` (see `.env.example`). The name is a placeholder ("ABC") and will be replaced later.
 - `NEXT_PUBLIC_*` values are inlined at build time. Always write `process.env.NEXT_PUBLIC_X` literally and never look the name up dynamically.
 - Write components as arrow functions. Components use named exports. `app/` pages and layouts use default exports.
 - Use `"use client"` only where hooks or browser APIs are needed.
@@ -63,3 +63,4 @@ There is no lint yet. Unit tests import `.ts` files directly with Node's type st
 - Color contrast: coral text uses `--coral-ink` / `coral-600` (`#b84a33`). Plain `--coral` / `coral-500` is for decoration only, because it fails WCAG on light backgrounds.
 - Import with the `@/` alias for `src/`.
 - Match the existing dense, mostly single-line JSX style. All user-facing copy is Vietnamese.
+- **Required fields:** pass `required` to `Field` / `TextareaField` / `SelectField` / `DatePicker` and they show a red `*` (and `aria-required` on selects/date pickers). Every form with fields starts with `<RequiredNote/>` ("Các trường có dấu * là bắt buộc.").
