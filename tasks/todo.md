@@ -272,18 +272,20 @@ Module này chỉ được đăng ký khi `NODE_ENV=test`. Thêm rule oxlint: `*
 **Files likely touched:** `backend/Dockerfile`, `backend/.dockerignore`, `docker-compose.yml`, `.env.example`
 **Estimated scope:** M
 
-### T11: FE rewrite `/api/*` → backend
+### T11: FE rewrite `/api/*` → backend ✅
 
 **Description:** Làm theo kết luận của T1: dùng `rewrites()` trong `next.config.ts`, hoặc route handler proxy. Đọc `BACKEND_URL` lúc chạy; mặc định là `http://localhost:4000`. Thêm `BACKEND_URL` vào `frontend/.env.example`. Nếu dùng proxy tự viết thì phải chuyển tiếp nguyên method, body, query, header `cookie` và `set-cookie`, và thêm `x-forwarded-for`.
 
 **Acceptance criteria:**
-- [ ] Chạy FE bằng `pnpm dev` và BE bằng `pnpm start:dev`: `curl localhost:3000/api/v1/health` trả về ok.
-- [ ] Trong Docker: `curl localhost:3000/api/v1/health` trả về ok, đi qua container frontend.
-- [ ] Header `cookie` đi tới backend và `set-cookie` quay về được qua proxy. Kiểm tra bằng `curl -i` với route lạ (404 vẫn trả header) và đọc cấu hình proxy. Việc kiểm tra cookie phiên thật qua trình duyệt chuyển sang module `auth`, vì route có `Set-Cookie` đầu tiên là đăng nhập.
+- [x] Chạy FE bằng `pnpm dev` và BE bằng `pnpm start:dev`: `curl localhost:3000/api/v1/health` trả về ok.
+- [x] Trong Docker: `curl localhost:3000/api/v1/health` trả về ok, đi qua container frontend.
+- [x] Header `cookie` đi tới backend và `set-cookie` quay về được qua proxy. Kiểm tra bằng `curl -i` với route lạ (404 vẫn trả header) và đọc cấu hình proxy. Việc kiểm tra cookie phiên thật qua trình duyệt chuyển sang module `auth`, vì route có `Set-Cookie` đầu tiên là đăng nhập.
 
 **Verification:**
-- [ ] `pnpm build` (FE); hai lệnh `curl` ở trên.
-- [ ] `pnpm a11y-check` vẫn không lỗi.
+- [x] `pnpm build` (FE); hai lệnh `curl` ở trên.
+- [x] `pnpm a11y-check` vẫn không lỗi.
+
+**Ghi chú khi làm:** Dùng `rewrites()`. `frontend/Dockerfile` có `ARG BACKEND_URL=http://backend:4000` trước `pnpm build`. Đã kiểm tra: ở dev (BE chạy cổng 4100), `/api/v1/health` qua `:3000` trả về ok và lỗi 404 vẫn giữ JSON của backend. Trong Docker, health qua container frontend trả về 200. `a11y-check` không lỗi (lần đầu phải cài Chromium cho Playwright).
 
 **Dependencies:** T1, T10
 **Files likely touched:** `frontend/next.config.ts` hoặc `frontend/src/app/api/[...path]/route.ts`, `frontend/.env.example`
