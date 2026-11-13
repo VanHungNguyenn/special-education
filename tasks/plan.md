@@ -100,7 +100,7 @@ T3 và T4 độc lập với nhau. T14 có thể viết song song từ sau T12.
 - [x] Success Criteria 1–4 của SPEC-platform.md đạt trên máy local
 
 ### Phase 4: Triển khai
-- [ ] T13: CI/CD
+- [x] T13: CI/CD (chưa chạy thật)
 - [ ] T14: Tài liệu
 
 ### Checkpoint D (hoàn thành module)

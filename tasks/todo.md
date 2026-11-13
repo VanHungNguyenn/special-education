@@ -329,7 +329,7 @@ Module này chỉ được đăng ký khi `NODE_ENV=test`. Thêm rule oxlint: `*
 
 ## Phase 4: Triển khai
 
-### T13: CI/CD
+### T13: CI/CD ✅ (chưa chạy thật trên GitHub)
 
 **Description:** Sửa `.github/workflows/deploy.yml`:
 - trigger thêm `backend/**` và `pull_request`;
@@ -346,13 +346,18 @@ Module này chỉ được đăng ký khi `NODE_ENV=test`. Thêm rule oxlint: `*
   - smoke test: chờ tối đa 90 giây tới khi `docker compose exec -T frontend wget -qO- http://localhost:3000/api/v1/health` trả về ok, nếu không thì fail.
 
 **Acceptance criteria:**
-- [ ] PR chỉ chạy test, không build, không deploy.
-- [ ] Test fail thì không build, không deploy.
-- [ ] Smoke test fail thì job deploy fail.
+- [x] PR chỉ chạy test, không build, không deploy.
+- [x] Test fail thì không build, không deploy.
+- [x] Smoke test fail thì job deploy fail.
 
 **Verification:**
-- [ ] Kiểm tra YAML bằng `actionlint` nếu có, nếu không thì `python -c "import yaml"`.
+- [x] Kiểm tra YAML bằng `actionlint` nếu có, nếu không thì `python -c "import yaml"`.
 - [ ] Chạy thật trên nhánh (cần chủ dự án đặt `.env` trên server trước).
+
+**Ghi chú khi làm:**
+- Ba điều kiện trên được đảm bảo bằng cấu trúc workflow: `build` cần `backend-test` và bỏ qua pull request; `deploy` cần `build` và chỉ chạy trên `master`; smoke test `exit 1` nếu sau 90 giây health chưa trả về ok.
+- Đã kiểm tra tĩnh: `actionlint` 1.7.7 không lỗi; đoạn script SSH qua `bash -n` và `shellcheck` 0.10.0 không lỗi.
+- **Chưa chạy thật**, vì cần push lên GitHub và server phải có `.env`. Deploy cũng chỉ chạy được khi đã chọn `workflow_dispatch` trên `master`, vì vậy chạy tay từ nhánh khác sẽ chỉ build mà không deploy.
 
 **Dependencies:** T8, T10
 **Files likely touched:** `.github/workflows/deploy.yml`

@@ -1,4 +1,4 @@
-name: Build & Deploy Frontend
+name: Build & Deploy
 
 on:
   push:
@@ -6,25 +6,83 @@ on:
       - master
     paths:
       - "frontend/**"
+      - "backend/**"
+      - "docker-compose.yml"
+      - ".github/workflows/deploy.yml"
+  pull_request:
+    paths:
+      - "frontend/**"
+      - "backend/**"
       - "docker-compose.yml"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/special-education-frontend
 
 jobs:
+  backend-test:
+    name: Backend Lint & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/special_education_test
+      DIRECT_URL: postgresql://postgres:postgres@localhost:5432/special_education_test
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: special_education_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d special_education_test"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: corepack enable && pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: E2E tests
+        run: pnpm test:e2e
+
+      - name: Build
+        run: pnpm build
+
   # ─── Job 1: Build & push image ────────────────────────────────────────
   build:
-    name: Build & Push Docker Image
+    name: Build & Push ${{ matrix.app }} Image
+    needs: backend-test
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
-    outputs:
-      image_tag: ${{ steps.meta.outputs.tags }}
+    strategy:
+      matrix:
+        app: [frontend, backend]
 
     steps:
       - name: Checkout
@@ -44,7 +102,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/special-education-${{ matrix.app }}
           tags: |
             type=sha,prefix=sha-,format=short
             type=raw,value=latest,enable={{is_default_branch}}
@@ -52,17 +110,18 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
+          context: ./${{ matrix.app }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=${{ matrix.app }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.app }}
 
   # ─── Job 2: Deploy to VPS via SSH ─────────────────────────────────────
   deploy:
     name: Deploy to Server
     needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     environment: production
 
@@ -88,14 +147,35 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
+            set -e
             cd /opt/special-education
+
+            test -f .env || { echo "Thiếu file /opt/special-education/.env"; exit 1; }
+            for name in POSTGRES_PASSWORD FRONTEND_IMAGE BACKEND_IMAGE; do
+              grep -q "^${name}=." .env || { echo "Thiếu ${name} trong /opt/special-education/.env"; exit 1; }
+            done
 
             # Login to GHCR
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
             # Pull latest image and restart
             docker compose pull
-            docker compose up -d --no-build
+            docker compose up -d --no-build --remove-orphans
+
+            healthy=""
+            for _ in $(seq 1 45); do
+              if docker compose exec -T frontend wget -qO- http://localhost:3000/api/v1/health 2>/dev/null | grep -q '"status":"ok"'; then
+                healthy=1
+                break
+              fi
+              sleep 2
+            done
+            if [ -z "$healthy" ]; then
+              echo "Smoke test thất bại: /api/v1/health không trả về ok sau 90 giây"
+              docker compose ps
+              docker compose logs --tail=50 backend
+              exit 1
+            fi
 
             # Clean up old images
             docker image prune -f
