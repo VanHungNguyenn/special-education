@@ -186,7 +186,7 @@ Definition of Done cho mọi task:
 
 **Dependencies:** Checkpoint BE · **Scope:** M
 
-### F2: Màn hình đăng nhập thật + chặn `/portal`
+### F2: Màn hình đăng nhập thật + chặn `/portal` ✅
 
 **Description:**
 - `features/auth/` gồm `api`, `queries`, `query-keys`, `types`; các hook `useMe`, `useLogin`, `useLogout`, `useChangePassword`.
@@ -198,9 +198,11 @@ Definition of Done cho mọi task:
 - `src/proxy.ts`: matcher `/portal/:path*`; không có cookie `sid` thì chuyển `/login?next=<path+query>`.
 
 **Acceptance criteria:**
-- [ ] Không có cookie, vào `/portal?tab=reports` thì nhận 307 tới `/login?next=%2Fportal%3Ftab%3Dreports`.
-- [ ] Đăng nhập đúng thì về đúng `next`. Sai thì hiện thông báo của BE, focus vẫn ở form.
-- [ ] `next=https://evil.com` hoặc `next=//evil.com` thì về `/portal`.
+- [x] Không có cookie, vào `/portal?tab=reports` thì nhận 307 tới `/login?next=%2Fportal%3Ftab%3Dreports`.
+- [x] Đăng nhập đúng thì về đúng `next`. Sai thì hiện thông báo của BE, focus vẫn ở form.
+- [x] `next=https://evil.com` hoặc `next=//evil.com` thì về `/portal`.
+
+**Ghi chú khi làm:** `next` được đọc từ `window.location` lúc submit, không dùng `useSearchParams` (nếu dùng thì Next bắt bọc trong Suspense). `safeNext` có unit test (chặn `//evil.com`, `/\\evil.com`, `https://…`). Nút đăng nhập dùng `aria-disabled` thay vì `disabled`: với `disabled`, focus rơi về `<body>` sau khi gửi; giờ focus ở lại ô mật khẩu. Đã thử trên Playwright: bị chuyển hướng kèm `next`, thông báo lỗi tiếng Việt, đăng nhập rồi về đúng `next`, và chặn redirect ra ngoài.
 
 **Dependencies:** F1 · **Scope:** M
 

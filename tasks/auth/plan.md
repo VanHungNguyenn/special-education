@@ -43,7 +43,7 @@ F1 lib/api + TanStack ─ F2 login + proxy ─ F3 menu tài khoản ─ F4 tab T
 
 ### Phase 2: Frontend
 - [x] F1: Nền tảng `lib/api` + TanStack Query
-- [ ] F2: Màn hình đăng nhập thật + chặn `/portal`
+- [x] F2: Màn hình đăng nhập thật + chặn `/portal`
 - [ ] F3: Menu tài khoản, đổi mật khẩu, đăng xuất
 - [ ] F4: Tab Tài khoản cho Quản lý
 - [ ] F5: Công cụ kiểm tra tự đăng nhập; thử đăng nhập trên trình duyệt thật
