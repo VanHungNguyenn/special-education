@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useLayoutEffect, useState, type FormEvent } from "react";
 import { dialogCloseTarget } from "@/components/common/dialog-classes";
 import { FormError } from "@/components/common/form-error";
 import { Field } from "@/components/common/form-field";
@@ -12,10 +12,9 @@ export const ChangePasswordDialog = ({ open, onOpenChange }: { open: boolean; on
   const changePassword = useChangePassword();
   const [mismatch, setMismatch] = useState(false);
 
-  const close = (next: boolean) => {
-    if (!next) { changePassword.reset(); setMismatch(false); }
-    onOpenChange(next);
-  };
+  const { reset } = changePassword;
+  useLayoutEffect(() => { if (open) { reset(); setMismatch(false); } }, [open, reset]);
+  const close = onOpenChange;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

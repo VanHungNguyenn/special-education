@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useLayoutEffect, useState, type FormEvent } from "react";
 import { dialogCloseTarget } from "@/components/common/dialog-classes";
 import { FormError } from "@/components/common/form-error";
 import { Field, SelectField } from "@/components/common/form-field";
@@ -22,11 +22,13 @@ type FormDialogProps = { open: boolean; user: User | null; isSelf: boolean; onOp
 export const AccountFormDialog = ({ open, user, isSelf, onOpenChange }: FormDialogProps) => {
   const create = useCreateUser(); const update = useUpdateUser();
   const mutation = user ? update : create;
-  const close = (next: boolean) => { if (!next) { create.reset(); update.reset(); } onOpenChange(next); };
+  const { reset: resetCreate } = create; const { reset: resetUpdate } = update;
+  useLayoutEffect(() => { if (open) { resetCreate(); resetUpdate(); } }, [open, resetCreate, resetUpdate]);
+  const close = onOpenChange;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (mutation.isPending) return;
+    if (mutation.isPending || mutation.isSuccess) return;
     const data = new FormData(event.currentTarget);
     const fields = { email: String(data.get("email")), fullName: String(data.get("fullName")), phone: String(data.get("phone")), role: String(data.get("role") ?? user?.role) as Role };
     const onSuccess = () => close(false);
@@ -35,21 +37,23 @@ export const AccountFormDialog = ({ open, user, isSelf, onOpenChange }: FormDial
   };
 
   return <Dialog open={open} onOpenChange={close}><DialogContent className={`max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-lg ${dialogCloseTarget}`}><DialogHeader><DialogTitle>{user ? "Sửa tài khoản" : "Thêm tài khoản"}</DialogTitle><DialogDescription>{user ? "Cập nhật thông tin và vai trò của tài khoản." : "Gửi email và mật khẩu ban đầu cho người dùng sau khi tạo."}</DialogDescription></DialogHeader>
-    {open && <form onSubmit={handleSubmit} className="space-y-4"><Field label="Họ và tên" name="fullName" required maxLength={100} defaultValue={user?.fullName} autoComplete="off"/><div className="grid gap-4 sm:grid-cols-2"><Field label="Email" name="email" type="email" required maxLength={254} defaultValue={user?.email} autoComplete="off"/><Field label="Điện thoại" name="phone" type="tel" maxLength={20} defaultValue={user?.phone} autoComplete="off"/></div>{isSelf ? <p className="text-sm text-slate-600">Bạn không thể tự đổi vai trò của mình.</p> : <SelectField label="Vai trò" name="role" defaultValue={user?.role ?? "TEACHER"}>{(Object.keys(roleLabel) as Role[]).map((role) => <SelectItem value={role} key={role}>{roleLabel[role]}</SelectItem>)}</SelectField>}{!user && <PasswordField label="Mật khẩu ban đầu (8–128 ký tự)"/>}<FormError message={errorText(mutation.error)}/><DialogFooter><Button size="lg" type="button" variant="outline" onClick={() => close(false)}>Hủy</Button><Button size="lg" type="submit" aria-disabled={mutation.isPending}>{mutation.isPending ? "Đang lưu…" : user ? "Lưu thay đổi" : "Tạo tài khoản"}</Button></DialogFooter></form>}
+    <form key={user?.id ?? "new"} onSubmit={handleSubmit} className="space-y-4"><Field label="Họ và tên" name="fullName" required maxLength={100} defaultValue={user?.fullName} autoComplete="off"/><div className="grid gap-4 sm:grid-cols-2"><Field label="Email" name="email" type="email" required maxLength={254} defaultValue={user?.email} autoComplete="off"/><Field label="Điện thoại" name="phone" type="tel" maxLength={20} defaultValue={user?.phone} autoComplete="off"/></div>{isSelf ? <p className="text-sm text-slate-600">Bạn không thể tự đổi vai trò của mình.</p> : <SelectField label="Vai trò" name="role" defaultValue={user?.role ?? "TEACHER"}>{(Object.keys(roleLabel) as Role[]).map((role) => <SelectItem value={role} key={role}>{roleLabel[role]}</SelectItem>)}</SelectField>}{!user && <PasswordField label="Mật khẩu ban đầu (8–128 ký tự)"/>}<FormError message={errorText(mutation.error)}/><DialogFooter><Button size="lg" type="button" variant="outline" onClick={() => close(false)}>Hủy</Button><Button size="lg" type="submit" aria-disabled={mutation.isPending || mutation.isSuccess}>{mutation.isPending || mutation.isSuccess ? "Đang lưu…" : user ? "Lưu thay đổi" : "Tạo tài khoản"}</Button></DialogFooter></form>
   </DialogContent></Dialog>;
 };
 
-export const ResetPasswordDialog = ({ user, onOpenChange }: { user: User | null; onOpenChange: (open: boolean) => void }) => {
+export const ResetPasswordDialog = ({ open, user, onOpenChange }: { open: boolean; user: User | null; onOpenChange: (open: boolean) => void }) => {
   const reset = useResetUserPassword();
-  const close = (next: boolean) => { if (!next) reset.reset(); onOpenChange(next); };
+  const { reset: resetMutation } = reset;
+  useLayoutEffect(() => { if (open) resetMutation(); }, [open, resetMutation]);
+  const close = onOpenChange;
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!user || reset.isPending) return;
     reset.mutate({ id: user.id, password: String(new FormData(event.currentTarget).get("password")) });
   };
-  return <Dialog open={Boolean(user)} onOpenChange={close}><DialogContent className={`sm:max-w-md ${dialogCloseTarget}`}><DialogHeader><DialogTitle>Đặt lại mật khẩu</DialogTitle><DialogDescription>{user ? `${user.fullName} sẽ bị đăng xuất khỏi mọi thiết bị và đăng nhập lại bằng mật khẩu mới.` : ""}</DialogDescription></DialogHeader>
+  return <Dialog open={open} onOpenChange={close}><DialogContent className={`sm:max-w-md ${dialogCloseTarget}`}><DialogHeader><DialogTitle>Đặt lại mật khẩu</DialogTitle><DialogDescription>{user ? `${user.fullName} sẽ bị đăng xuất khỏi mọi thiết bị và đăng nhập lại bằng mật khẩu mới.` : ""}</DialogDescription></DialogHeader>
     {reset.isSuccess
       ? <><p role="status" className="rounded-md bg-brand-50 px-3 py-2.5 text-sm font-medium text-brand-700">Đã đặt lại mật khẩu. Hãy gửi mật khẩu mới cho {user?.fullName}.</p><DialogFooter><Button size="lg" onClick={() => close(false)}>Xong</Button></DialogFooter></>
-      : user && <form onSubmit={handleSubmit} className="space-y-4"><PasswordField label="Mật khẩu mới (8–128 ký tự)"/><FormError message={errorText(reset.error)}/><DialogFooter><Button size="lg" type="button" variant="outline" onClick={() => close(false)}>Hủy</Button><Button size="lg" type="submit" aria-disabled={reset.isPending}>{reset.isPending ? "Đang lưu…" : "Đặt lại mật khẩu"}</Button></DialogFooter></form>}
+      : <form key={user?.id} onSubmit={handleSubmit} className="space-y-4"><PasswordField label="Mật khẩu mới (8–128 ký tự)"/><FormError message={errorText(reset.error)}/><DialogFooter><Button size="lg" type="button" variant="outline" onClick={() => close(false)}>Hủy</Button><Button size="lg" type="submit" aria-disabled={reset.isPending}>{reset.isPending ? "Đang lưu…" : "Đặt lại mật khẩu"}</Button></DialogFooter></form>}
   </DialogContent></Dialog>;
 };
