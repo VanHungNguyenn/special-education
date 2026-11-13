@@ -4,6 +4,8 @@ import { AuthenticateSessionUseCase } from './application/authenticate-session.u
 import { ChangeOwnPasswordUseCase } from './application/change-own-password.use-case.js';
 import { CreateUserUseCase } from './application/create-user.use-case.js';
 import { ListUsersUseCase } from './application/list-users.use-case.js';
+import { ResetUserPasswordUseCase } from './application/reset-user-password.use-case.js';
+import { UpdateUserUseCase } from './application/update-user.use-case.js';
 import { LoginUseCase } from './application/login.use-case.js';
 import { LogoutUseCase } from './application/logout.use-case.js';
 import { CLOCK, PASSWORD_HASHER, SESSION_REPOSITORY, USER_REPOSITORY } from './domain/ports.js';
@@ -30,6 +32,8 @@ import { SystemClock } from './infrastructure/system-clock.js';
     ChangeOwnPasswordUseCase,
     ListUsersUseCase,
     CreateUserUseCase,
+    UpdateUserUseCase,
+    ResetUserPasswordUseCase,
     SessionCookie,
     { provide: APP_GUARD, useClass: SessionGuard },
     { provide: APP_GUARD, useClass: RolesGuard },

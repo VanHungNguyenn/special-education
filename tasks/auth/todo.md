@@ -118,7 +118,7 @@ Definition of Done cho mọi task:
 
 **Dependencies:** B2 · **Scope:** M
 
-### B6: Sửa, vô hiệu hóa, đặt lại mật khẩu, quy tắc Quản lý cuối cùng
+### B6: Sửa, vô hiệu hóa, đặt lại mật khẩu, quy tắc Quản lý cuối cùng ✅
 
 **Description:**
 - `PATCH /users/:id` (email, họ tên, điện thoại, vai trò, `isActive`).
@@ -127,10 +127,12 @@ Definition of Done cho mọi task:
 - Vô hiệu hóa hoặc đặt lại mật khẩu thì xóa mọi phiên của người đó. Đặt lại mật khẩu thì mở khóa.
 
 **Acceptance criteria:**
-- [ ] Unit: không vô hiệu hóa hay hạ vai trò Quản lý cuối cùng đang hoạt động; Quản lý không tự vô hiệu hóa hay tự hạ vai trò.
-- [ ] e2e: vô hiệu hóa giáo viên thì phiên đang mở của người đó nhận 401, và đăng nhập lại nhận `403 ACCOUNT_DISABLED`.
-- [ ] e2e: đặt lại mật khẩu cho tài khoản đang bị khóa thì đăng nhập ngay bằng mật khẩu mới được.
-- [ ] e2e: id không tồn tại nhận `404 USER_NOT_FOUND`; id không phải UUID nhận 400.
+- [x] Unit: không vô hiệu hóa hay hạ vai trò Quản lý cuối cùng đang hoạt động; Quản lý không tự vô hiệu hóa hay tự hạ vai trò.
+- [x] e2e: vô hiệu hóa giáo viên thì phiên đang mở của người đó nhận 401, và đăng nhập lại nhận `403 ACCOUNT_DISABLED`.
+- [x] e2e: đặt lại mật khẩu cho tài khoản đang bị khóa thì đăng nhập ngay bằng mật khẩu mới được.
+- [x] e2e: id không tồn tại nhận `404 USER_NOT_FOUND`; id không phải UUID nhận 400.
+
+**Ghi chú khi làm:** Qua API thì không thể gặp `LAST_MANAGER`. Người gọi luôn là một Quản lý đang hoạt động, nên khi tác động tới Quản lý *khác* thì vẫn còn ít nhất 2 Quản lý; trường hợp tự hạ vai trò hoặc tự vô hiệu hóa đã bị `CANNOT_CHANGE_SELF` chặn. `LAST_MANAGER` được giữ trong domain (có unit test) làm lớp phòng thủ thứ hai, ví dụ khi hai request chạy đồng thời. e2e kiểm tra lỗi tự thay đổi chính mình và việc vô hiệu hóa một Quản lý khác.
 
 **Dependencies:** B5 · **Scope:** M
 
