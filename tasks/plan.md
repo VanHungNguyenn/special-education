@@ -101,11 +101,11 @@ T3 và T4 độc lập với nhau. T14 có thể viết song song từ sau T12.
 
 ### Phase 4: Triển khai
 - [x] T13: CI/CD (chưa chạy thật)
-- [ ] T14: Tài liệu
+- [x] T14: Tài liệu
 
 ### Checkpoint D (hoàn thành module)
 - [ ] Success Criteria 5 đạt (deploy thật)
-- [ ] Hướng dẫn thử Neon/Supabase (Success Criteria 6) có trong tài liệu
+- [x] Hướng dẫn thử Neon/Supabase (Success Criteria 6) có trong tài liệu
 - [ ] Review với chủ dự án, rồi viết `SPEC-auth.md`
 
 ## Risks and Mitigations

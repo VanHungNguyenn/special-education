@@ -1,6 +1,6 @@
 # Yêu cầu backend (rút ra từ frontend hiện tại)
 
-Tài liệu này ghi lại những gì frontend đang làm bằng dữ liệu giả, tức là những gì backend phải cung cấp thật. Đây chưa phải thiết kế API, chỉ là đầu vào để lên kế hoạch. Chi tiết nghiệp vụ phía FE: [frontend/docs/domain.md](../frontend/docs/domain.md).
+Tài liệu này ghi lại những gì frontend đang làm bằng dữ liệu giả, tức là những gì backend phải cung cấp thật. Đây là đầu vào đã dùng để viết spec; các quyết định đã chốt nằm trong [SPEC-backend.md](../SPEC-backend.md) (nguồn chuẩn khi hai tài liệu lệch nhau). Chi tiết nghiệp vụ phía FE: [frontend/docs/domain.md](../frontend/docs/domain.md).
 
 ## 1. Thực thể
 
@@ -52,13 +52,15 @@ FE đã chặn các trường hợp này trên giao diện, nhưng BE vẫn ph�
 
 ## 5. Triển khai
 
-Hiện chỉ có service `frontend`. Khi thêm BE cần:
+**Đã làm ở module `platform`** (xem [deployment.md](deployment.md)). Danh sách ban đầu:
 
 - Thêm service `backend` (và database nếu có) vào `docker-compose.yml` và `docker-compose.dev.yml`.
 - Mở rộng `docker.sh` (lệnh `logs` và `status` đang lọc theo tên `special-education-frontend`).
 - Workflow `.github/workflows/deploy.yml` chỉ chạy khi `frontend/**` thay đổi và chỉ build image FE. Cần thêm job build cho BE.
 
 ## 6. Câu hỏi mở
+
+**Đã chốt hết** trong SPEC-backend.md: hai vai trò Quản lý/Giáo viên, Quản lý mở khóa phiếu, có lịch sử chỉnh sửa, xóa mềm học sinh, tiêu chí linh động với snapshot. Câu 4 (phiếu cũ khi chuyển lớp) và câu 5 (tháng mặc định) sẽ trả lời trong spec `roster` và `evaluations`. Danh sách gốc:
 
 Các câu hỏi đã có trong mục Open Questions của [SPEC.md](../SPEC.md) (định dạng file báo cáo, sinh file đồng bộ hay qua job, nhóm tiêu chí lệch với mẫu GDCN, lấy tên trị liệu viên từ đâu). Ngoài ra còn:
 

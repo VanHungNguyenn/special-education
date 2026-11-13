@@ -18,6 +18,16 @@ Các file liên quan:
 
 Nếu không có biến môi trường, `site.ts` sẽ dùng giá trị mặc định giống bảng trên.
 
+## Địa chỉ backend
+
+`BACKEND_URL` (không có tiền tố `NEXT_PUBLIC_`) là địa chỉ mà `next.config.ts` chuyển tiếp `/api/*` tới. Next đọc biến này khi nạp config, tức là lúc `pnpm dev` khởi động hoặc lúc `next build`, **không đọc lại khi chạy `next start`**.
+
+| Môi trường | Giá trị |
+|---|---|
+| `pnpm dev` trên máy | `frontend/.env`, mặc định `http://localhost:4000` |
+| `./docker.sh dev` | `http://backend:4000` (đặt trong `docker-compose.dev.yml`) |
+| Image Docker | `ARG BACKEND_URL=http://backend:4000` trong `Dockerfile` |
+
 ## Đổi tên trung tâm
 
 1. Sửa các biến trong `frontend/.env`.

@@ -26,7 +26,7 @@ There is no lint yet; unit tests cover only the helpers in `src/lib/utils.ts`. A
   - `src/app/page.tsx`: the landing page. A server component styled with `globals.css`.
   - `src/app/login/page.tsx`: a **mock** login. Any submit redirects to `/portal`, and no auth happens.
   - `src/app/portal/`: one client page (`page.tsx`) with three tabs: `classes`, `students`, `reports`. It reads the deep links `?tab=` and `?student=<id>` once, on mount.
-- State: all portal state lives in `useSchoolManagement` (`src/features/school/use-school-management.ts`), seeded from the mock data in `src/features/school/data.ts`. The app has **no backend and no persistence**, so a reload resets everything.
+- State: all portal state lives in `useSchoolManagement` (`src/features/school/use-school-management.ts`), seeded from the mock data in `src/features/school/data.ts`. The portal is **not wired to the backend yet**, so a reload resets everything. The backend lives in `../backend`; `/api/*` is rewritten to `BACKEND_URL` (see `next.config.ts`). Wiring follows the TanStack Query plan in `../docs/architecture.md` §3, starting with the `auth` module.
 - Folders:
   - `src/components/ui/`: **shadcn/ui components only** (new-york style on Radix, configured in `components.json`).
   - `src/components/common/`: compositions of shadcn primitives (`DatePicker`, `MonthPicker`, `Field`/`TextareaField`/`SelectField`).

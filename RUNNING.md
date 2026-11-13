@@ -2,67 +2,75 @@
 
 ## Yêu cầu
 
-- [Node.js 22+](https://nodejs.org) và [pnpm](https://pnpm.io) — để chạy dev local
-- [Docker Desktop](https://www.docker.com/products/docker-desktop) — để chạy bằng Docker
+- [Node.js 22+](https://nodejs.org) và [pnpm](https://pnpm.io): để chạy dev local
+- [Docker Desktop](https://www.docker.com/products/docker-desktop): để chạy Postgres và chạy toàn bộ bằng Docker
 
 ---
 
-## 1. Chạy development (local)
+## 1. Chạy toàn bộ bằng Docker (dễ nhất)
+
+```bash
+./docker.sh dev        # hot reload FE + BE + Postgres
+./docker.sh            # bản giống production (build image)
+./docker.sh logs       # xem log (thêm frontend | backend | db để xem riêng)
+./docker.sh status     # trạng thái container
+./docker.sh restart    # build lại và chạy lại
+./docker.sh down       # dừng (không xóa dữ liệu)
+```
+
+- Lần đầu, `docker.sh` tự tạo `.env` ở thư mục gốc từ `.env.example`.
+- FE: http://localhost:3000.
+- Ở chế độ dev, API mở ở http://localhost:4000/api/v1/health, tài liệu API ở http://localhost:4000/api/v1/docs.
+- Ở bản production, chỉ cổng 3000 được mở; API vẫn gọi được qua http://localhost:3000/api/v1/health.
+
+Khi cổng bị trùng:
+
+```bash
+PORT=8080 ./docker.sh                           # đổi cổng FE
+BACKEND_PORT=4100 DB_PORT=5433 ./docker.sh dev  # đổi cổng BE và DB ở chế độ dev
+```
+
+---
+
+## 2. Chạy từng phần trên máy (không dùng Docker cho code)
+
+Postgres vẫn chạy bằng Docker:
+
+```bash
+docker compose -f docker-compose.dev.yml up -d db
+```
+
+Backend (terminal 1):
+
+```bash
+cd backend
+cp .env.example .env
+pnpm install
+pnpm db:deploy
+pnpm start:dev        # http://localhost:4000/api/v1/health
+```
+
+Frontend (terminal 2):
 
 ```bash
 cd frontend
+cp .env.example .env  # BACKEND_URL=http://localhost:4000
 pnpm install
-pnpm dev
+pnpm dev              # http://localhost:3000, /api/* được chuyển sang backend
 ```
 
-Truy cập: http://localhost:3000
+Nếu backend chạy ở cổng khác (đổi `PORT` trong `backend/.env`), sửa `BACKEND_URL` trong `frontend/.env` cho khớp, rồi khởi động lại `pnpm dev`.
 
 ---
 
-## 2. Chạy bằng Docker
-
-### Cách nhanh nhất
+## 3. Kiểm thử
 
 ```bash
-./docker.sh            # build và chạy nền (= up)
-./docker.sh logs       # xem log
-./docker.sh status     # trạng thái container
-./docker.sh restart    # build lại và chạy lại
-./docker.sh down       # dừng
-PORT=8080 ./docker.sh  # chạy ở cổng khác
+cd backend && pnpm lint && pnpm test && pnpm test:e2e && pnpm build
+cd frontend && pnpm build && pnpm test
 ```
 
-### Build và chạy một lệnh
-
-```bash
-docker compose up --build
-```
-
-### Chạy nền (background)
-
-```bash
-docker compose up --build -d
-```
-
-### Dừng
-
-```bash
-docker compose down
-```
-
-Truy cập: http://localhost:3000
-
----
-
-## 3. Chạy Docker thủ công (không dùng compose)
-
-```bash
-# Build image
-docker build -t special-education-frontend ./frontend
-
-# Chạy container
-docker run -p 3000:3000 special-education-frontend
-```
+e2e của backend dùng database `special_education_test` trong cùng container Postgres, không đụng dữ liệu dev.
 
 ---
 
@@ -70,10 +78,12 @@ docker run -p 3000:3000 special-education-frontend
 
 ```
 special-education/
-├── frontend/          # Next.js app
-│   ├── src/
-│   ├── public/
-│   ├── Dockerfile
-│   └── package.json
-└── docker-compose.yml
+├── frontend/                # Next.js app
+├── backend/                 # NestJS API + Prisma
+├── docker-compose.yml       # production: frontend, backend, db
+├── docker-compose.dev.yml   # dev: hot reload
+├── docker.sh
+└── docs/                    # kiến trúc, triển khai, yêu cầu backend
 ```
+
+Triển khai lên server: [docs/deployment.md](docs/deployment.md).

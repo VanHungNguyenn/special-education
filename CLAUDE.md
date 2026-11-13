@@ -7,7 +7,7 @@ Monorepo for a special-education center (Vietnamese UI): a public landing page p
 | Part | State |
 |---|---|
 | `frontend/` | Done enough to demo. Next.js 16, **mock data only, no persistence, mock login**. Has its own [CLAUDE.md](frontend/CLAUDE.md) and [docs/](frontend/docs/README.md). |
-| `backend/` | Not started (branch `feat/backend-starter`). Architecture: [docs/architecture.md](docs/architecture.md). Specs: [SPEC-backend.md](SPEC-backend.md) (module map) → `SPEC-<module>.md`. FE needs: [docs/backend-requirements.md](docs/backend-requirements.md). |
+| `backend/` | Module `platform` done: NestJS 12 + Prisma 7 + Postgres, health, error format, OpenAPI, Docker, CI. No business modules yet; next is `auth`. Its own [CLAUDE.md](backend/CLAUDE.md). Architecture: [docs/architecture.md](docs/architecture.md). Specs: [SPEC-backend.md](SPEC-backend.md) (module map) → `SPEC-<module>.md`. FE needs: [docs/backend-requirements.md](docs/backend-requirements.md). |
 
 ## Layout
 
@@ -20,25 +20,30 @@ special-education/
 ├── Mau_GDCN.pdf              # the center's paper evaluation form; the backend renders reports in this layout
 ├── docs/backend-requirements.md  # FE → BE contract: entities, operations, rules, open questions
 ├── frontend/                 # Next.js app (see frontend/CLAUDE.md before touching it)
-├── docker-compose.yml        # prod: one service `frontend` on :3000, image from GHCR
-├── docker-compose.dev.yml    # dev: mounts ./frontend, runs pnpm dev
-├── docker.sh                 # ./docker.sh [up|dev|down|restart|logs|status]
-└── .github/workflows/deploy.yml  # push to master touching frontend/** → build image → SSH deploy
+├── backend/                  # NestJS API (see backend/CLAUDE.md before touching it)
+├── tasks/                    # plan.md + todo.md of the current module
+├── docker-compose.yml        # prod: frontend :3000 (only published port), backend, db (volume pgdata)
+├── docker-compose.dev.yml    # dev: hot reload of ./frontend and ./backend, db on 127.0.0.1:5432
+├── docker.sh                 # ./docker.sh [up|dev|down|restart|logs [svc]|status]
+└── .github/workflows/deploy.yml  # backend tests on PRs; master: build both images → SSH deploy → smoke test
 ```
 
 ## Commands
 
 ```bash
-cd frontend && pnpm install && pnpm dev   # http://localhost:3000
-cd frontend && pnpm build && pnpm test    # type-check + unit tests
-./docker.sh                               # prod-like container
-./docker.sh dev                           # dev container with hot reload
+./docker.sh dev                           # FE :3000 + BE :4000 + Postgres, hot reload
+./docker.sh                               # prod-like stack
+cd backend && pnpm lint && pnpm test && pnpm test:e2e && pnpm build
+cd frontend && pnpm build && pnpm test
 ```
+
+Running without Docker and port overrides: [RUNNING.md](RUNNING.md). Deployment, server env vars, Neon/Supabase switch: [docs/deployment.md](docs/deployment.md).
 
 UI checks (`pnpm a11y-check`, `pnpm layout-check`, `pnpm screenshot`) need a running server; see [frontend/docs/testing.md](frontend/docs/testing.md).
 
 ## Where the backend plugs in
 
+- FE reaches the API through `/api/*`, which `frontend/next.config.ts` rewrites to `BACKEND_URL` (baked in at build time; `http://backend:4000` in Docker).
 - All portal state and every mutation live in one hook: `frontend/src/features/school/use-school-management.ts`. Replacing its `useState` calls with API calls is the integration point; components receive data via props and don't need to change.
 - Types to mirror: `frontend/src/features/school/types.ts`. Criteria list and labels: `frontend/src/features/school/data.ts`.
 - Login is fake: `frontend/src/app/login/page.tsx` just redirects to `/portal`. The account menu (`components/school/account-menu.tsx`) shows a hard-coded user.
@@ -51,4 +56,4 @@ UI checks (`pnpm a11y-check`, `pnpm layout-check`, `pnpm screenshot`) need a run
 - Evaluation status flow is `draft → updated → locked`; a locked evaluation can't be edited. A class with students can't be deleted. Enforce both server-side once the backend exists.
 - Criteria are referenced by **array index** in `data.ts`. Reordering them corrupts stored ratings; the backend should use stable criterion IDs.
 - No code comments unless asked (user preference).
-- When adding the backend to Docker/CI: add a service to both compose files, extend `docker.sh`, and widen the `paths` filter in `deploy.yml` (it only watches `frontend/**` now).
+- Compose service names are `frontend`, `backend`, `db` in both compose files; keep them aligned (the FE image hard-codes `http://backend:4000`).

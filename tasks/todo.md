@@ -65,7 +65,7 @@ Xóa controller/service mẫu do CLI sinh ra. Không tạo thư mục rỗng (gi
 
 **Verification:**
 - [x] `pnpm test`
-- [ ] Xóa `DATABASE_URL` khỏi `.env`, chạy `pnpm start:dev`: app dừng và nêu đúng `DATABASE_URL`.
+- [x] Xóa `DATABASE_URL` khỏi `.env`, chạy `pnpm start:dev`: app dừng và nêu đúng `DATABASE_URL`.
 
 **Dependencies:** T2
 **Files likely touched:** `backend/src/config/env.validation.ts`, `backend/src/config/env.validation.spec.ts`, `backend/src/config/config.module.ts`, `backend/.env.example`, `backend/.env.test.example`
@@ -363,23 +363,25 @@ Module này chỉ được đăng ký khi `NODE_ENV=test`. Thêm rule oxlint: `*
 **Files likely touched:** `.github/workflows/deploy.yml`
 **Estimated scope:** M
 
-### T14: Tài liệu
+### T14: Tài liệu ✅
 
 **Description:** Cập nhật tài liệu theo hiện trạng mới. Chuyển tài liệu triển khai lên `docs/deployment.md` (gốc repo, vì giờ áp dụng cho cả FE và BE); `frontend/docs/deployment.md` chỉ còn link tới đó.
 
 **Acceptance criteria:**
-- [ ] `RUNNING.md`: chạy BE local và bằng Docker.
-- [ ] `CLAUDE.md` gốc: trạng thái và lệnh.
-- [ ] `backend/CLAUDE.md` mới: lệnh, quy tắc 4 lớp, cách tạo module mới từ `_template`.
-- [ ] `docs/deployment.md`:
+- [x] `RUNNING.md`: chạy BE local và bằng Docker.
+- [x] `CLAUDE.md` gốc: trạng thái và lệnh.
+- [x] `backend/CLAUDE.md` mới: lệnh, quy tắc 4 lớp, cách tạo module mới từ `_template`.
+- [x] `docs/deployment.md`:
   - danh sách biến trên server;
   - cảnh báo về volume;
   - cách chuyển sang Neon/Supabase (`DATABASE_URL` pooler, `DIRECT_URL` trực tiếp).
-- [ ] `docs/backend-requirements.md`: đánh dấu các mục đã chốt.
+- [x] `docs/backend-requirements.md`: đánh dấu các mục đã chốt.
 
 **Verification:**
-- [ ] Mọi link tương đối trong các file đã sửa đều trỏ tới file có thật (kiểm tra bằng script nhỏ hoặc `grep`).
+- [x] Mọi link tương đối trong các file đã sửa đều trỏ tới file có thật (kiểm tra bằng script nhỏ hoặc `grep`).
 - [ ] Chủ dự án làm theo `RUNNING.md` trên máy trống và chạy được.
+
+**Ghi chú khi làm:** Cập nhật thêm `README.md`, `frontend/CLAUDE.md` và `frontend/docs/configuration.md` (mục `BACKEND_URL`). Khi chạy lại toàn bộ kiểm tra, phát hiện `pnpm test` của FE vốn đã hỏng từ trước (`node --test scripts/`); đã sửa trong một commit riêng.
 
 **Dependencies:** T12, T13
 **Files likely touched:** `RUNNING.md`, `CLAUDE.md`, `backend/CLAUDE.md`, `docs/deployment.md`, `frontend/docs/deployment.md`
@@ -387,5 +389,5 @@ Module này chỉ được đăng ký khi `NODE_ENV=test`. Thêm rule oxlint: `*
 
 ## Checkpoint D (hoàn thành module `platform`)
 - [ ] Success Criteria 5 đạt (deploy thật, health trả về 200)
-- [ ] Hướng dẫn thử Neon/Supabase (Success Criteria 6) có trong tài liệu
+- [x] Hướng dẫn thử Neon/Supabase (Success Criteria 6) có trong tài liệu
 - [ ] Review với chủ dự án, rồi viết `SPEC-auth.md`
