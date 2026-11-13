@@ -13,6 +13,7 @@ export const createValidationPipe = () =>
   new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
+    stopAtFirstError: true,
     transform: true,
     exceptionFactory: (errors) => new DomainError('VALIDATION_FAILED', 'Dữ liệu không hợp lệ.', 400, toDetails(errors)),
   });

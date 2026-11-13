@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength, ValidateNested } from 'class-validator';
 import { DomainError } from '../errors/domain-error.js';
 import { createValidationPipe } from './validation.pipe.js';
 
@@ -9,6 +9,7 @@ class AddressDto {
 }
 
 class StudentDto {
+  @MaxLength(50, { message: 'Tên tối đa 50 ký tự.' })
   @IsString({ message: 'Tên phải là chuỗi.' })
   name: string;
 
@@ -36,6 +37,12 @@ describe('createValidationPipe', () => {
         { field: 'address.city', message: 'Thành phố không được để trống.' },
       ],
     });
+  });
+
+  it('reports only the first failing rule of a field', async () => {
+    const error = await validate({ name: 1, address: { city: 'Huế' } }).catch((e: unknown) => e);
+    expect(error).toMatchObject({ details: [{ field: 'name', message: 'Tên phải là chuỗi.' }] });
+    expect((error as DomainError).details).toHaveLength(1);
   });
 
   it('rejects properties that the DTO does not declare', async () => {

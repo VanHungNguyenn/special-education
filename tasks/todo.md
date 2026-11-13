@@ -182,7 +182,7 @@ Xóa controller/service mẫu do CLI sinh ra. Không tạo thư mục rỗng (gi
 **Files likely touched:** `backend/src/health/health.controller.ts`, `backend/src/health/health.module.ts`, `backend/test/health.e2e-spec.ts`
 **Estimated scope:** S
 
-### T8: Module mẫu `_template` (4 lớp)
+### T8: Module mẫu `_template` (4 lớp) ✅
 
 **Description:** Tạo `src/modules/_template/`, dùng ví dụ `Note`:
 - `domain`: entity có một quy tắc (tiêu đề không được rỗng), interface repository, token;
@@ -193,16 +193,22 @@ Xóa controller/service mẫu do CLI sinh ra. Không tạo thư mục rỗng (gi
 Module này chỉ được đăng ký khi `NODE_ENV=test`. Thêm rule oxlint: `**/domain/**` không được import `@nestjs/*` hay `@prisma/*`; `**/application/**` không được import `@prisma/*`.
 
 **Acceptance criteria:**
-- [ ] Unit test cho entity và use case, dùng repository giả.
-- [ ] e2e cho các trường hợp:
+- [x] Unit test cho entity và use case, dùng repository giả.
+- [x] e2e cho các trường hợp:
   - tạo thành công: 201;
   - body sai: 400 kèm `details`;
   - không tìm thấy: 404 với `code` của domain;
   - route test ném lỗi thường: 500 đúng dạng, không lộ stack.
-- [ ] Thêm thử một import `@nestjs/common` vào `domain/`: `pnpm lint` báo lỗi. Thử xong thì bỏ.
+- [x] Thêm thử một import `@nestjs/common` vào `domain/`: `pnpm lint` báo lỗi. Thử xong thì bỏ.
 
 **Verification:**
-- [ ] `pnpm test && pnpm test:e2e && pnpm lint`
+- [x] `pnpm test && pnpm test:e2e && pnpm lint`
+
+**Ghi chú khi làm:**
+- Module được đăng ký bằng `ConditionalModule.registerWhen(..., env => env.NODE_ENV === 'test')`. Đã kiểm tra: ở dev, `/api/v1/template/*` trả về 404.
+- Có thêm e2e cho lỗi nghiệp vụ (tiêu đề toàn khoảng trắng: 422 `NOTE_TITLE_REQUIRED`), để thấy rõ sự khác nhau giữa lỗi DTO (400) và lỗi domain.
+- Validation pipe bật `stopAtFirstError`: mỗi trường chỉ báo một lỗi. class-validator chạy decorator từ dưới lên, nên **quy tắc kiểu dữ liệu (`@IsString`…) phải đặt ở dòng cuối, sát thuộc tính**.
+- Lint còn chặn `express`, `class-validator`, `class-transformer` trong `domain/`.
 
 **Dependencies:** T6
 **Files likely touched:** `backend/src/modules/_template/**` (khoảng 7 file nhỏ, mỗi file một vai trò), `backend/test/template.e2e-spec.ts`, `backend/oxlint.json`
@@ -213,7 +219,7 @@ Module này chỉ được đăng ký khi `NODE_ENV=test`. Thêm rule oxlint: `*
 **Description:** Dùng `@nestjs/swagger` để sinh tài liệu từ controller và DTO. Chỉ bật khi `NODE_ENV` khác `production`. Bật plugin CLI của swagger để không phải gắn decorator thủ công cho từng trường DTO.
 
 **Acceptance criteria:**
-- [ ] Ở dev, `/api/v1/docs` hiện health và `_template`. Ở production trả về 404.
+- [ ] Ở dev, `/api/v1/docs` hiện health (và `_template` khi `NODE_ENV=test`). Ở production trả về 404.
 - [ ] `/api/v1/docs-json` trả về OpenAPI JSON. FE sẽ tra file này khi viết kiểu dữ liệu.
 
 **Verification:**
