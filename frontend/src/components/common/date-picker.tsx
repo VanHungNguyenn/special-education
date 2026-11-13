@@ -24,7 +24,7 @@ export const DatePicker = ({ label, name, defaultValue, required }: { label: str
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild><Button id={id} type="button" variant="outline" aria-required={required || undefined} aria-invalid={invalid || undefined} aria-describedby={invalid ? `${id}-error` : undefined} className={`h-11 w-full justify-between font-normal ${date ? "text-slate-700" : "text-slate-500"}`}>{date ? format(date, "dd/MM/yyyy", { locale: vi }) : "Chọn ngày"}<CalendarIcon className="text-slate-400"/></Button></PopoverTrigger>
       <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-        <Calendar mode="single" selected={date} onSelect={(value) => { setDate(value); if (value) { setOpen(false); setInvalid(false); } }} locale={vi} captionLayout="dropdown" startMonth={new Date(2000, 0)} endMonth={new Date()} defaultMonth={date} formatters={{ formatMonthDropdown: (month) => `Tháng ${month.getMonth() + 1}` }}/>
+        <Calendar mode="single" selected={date} onSelect={(value) => { setDate(value); if (value) { setOpen(false); setInvalid(false); } }} locale={vi} captionLayout="dropdown" startMonth={new Date(1900, 0)} endMonth={new Date()} defaultMonth={date} formatters={{ formatMonthDropdown: (month) => `Tháng ${month.getMonth() + 1}` }}/>
       </PopoverContent>
     </Popover>
     {invalid && <p id={`${id}-error`} role="alert" className="text-sm font-medium text-destructive">Vui lòng chọn {label.toLowerCase()}.</p>}

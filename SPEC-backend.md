@@ -18,8 +18,8 @@ Thay dữ liệu giả của FE bằng backend thật cho một trung tâm:
 |---|---|---|---|
 | `platform` | Khung NestJS, PostgreSQL + Prisma, cấu hình, định dạng lỗi, healthcheck, Docker, CI, nối FE → BE | — | [SPEC-platform.md](SPEC-platform.md) ✅ |
 | `auth` | Đăng nhập/đăng xuất, phiên, vai trò Quản lý/Giáo viên, quản lý tài khoản | platform | [SPEC-auth.md](SPEC-auth.md) ✅ |
-| `audit` | Lịch sử chỉnh sửa (ai, khi nào, trước/sau) | auth | chưa viết |
-| `roster` | Lớp (gắn tài khoản giáo viên), học sinh (xóa mềm), phạm vi xem theo lớp | auth, audit | chưa viết |
+| `audit` | Lịch sử chỉnh sửa (ai, khi nào, trước/sau) | auth | [SPEC-audit.md](SPEC-audit.md) ✅ duyệt |
+| `roster` | Lớp (gắn tài khoản giáo viên), học sinh (xóa mềm), phạm vi xem theo lớp | auth, audit | [SPEC-roster.md](SPEC-roster.md) ✅ duyệt |
 | `evaluations` | Danh mục tiêu chí (Quản lý thêm/sửa/ẩn, seed theo mẫu GDCN), phiếu tháng với snapshot tiêu chí, mục tiêu can thiệp + đánh giá, khóa/mở khóa | roster, audit | chưa viết |
 | `reports` | Tổng hợp tiến độ tháng, xuất PDF theo mẫu GDCN | evaluations | chưa viết |
 

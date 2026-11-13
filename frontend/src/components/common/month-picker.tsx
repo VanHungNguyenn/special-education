@@ -5,6 +5,9 @@ import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+const firstYear = 2000;
 
 const monthNames = ["Tháng 1","Tháng 2","Tháng 3","Tháng 4","Tháng 5","Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"];
 
@@ -14,10 +17,12 @@ export const MonthPicker = ({ value, onChange, label, className = "" }: { value:
   const [year, month] = value.split("-").map(Number);
   const [open, setOpen] = useState(false);
   const [viewYear, setViewYear] = useState(year);
+  const lastYear = Math.max(new Date().getFullYear() + 1, year);
+  const years = Array.from({ length: lastYear - firstYear + 1 }, (_, index) => lastYear - index);
   const picker = <Popover open={open} onOpenChange={(next) => { setOpen(next); if (next) setViewYear(year); }}>
     <PopoverTrigger asChild><Button id={id} type="button" variant="outline" className={`h-11 min-w-48 justify-between font-normal text-slate-700 ${className}`}>{monthNames[month - 1]} / {year}<CalendarIcon className="text-slate-400"/></Button></PopoverTrigger>
     <PopoverContent className="w-72" align="start">
-      <div className="mb-3 flex items-center justify-between"><Button variant="ghost" size="icon-sm" aria-label="Năm trước" onClick={() => setViewYear((current) => current - 1)}><ChevronLeft/></Button><strong className="text-sm">{viewYear}</strong><Button variant="ghost" size="icon-sm" aria-label="Năm sau" onClick={() => setViewYear((current) => current + 1)}><ChevronRight/></Button></div>
+      <div className="mb-3 flex items-center justify-between"><Button variant="ghost" size="icon-sm" aria-label="Năm trước" disabled={viewYear <= firstYear} onClick={() => setViewYear((current) => current - 1)}><ChevronLeft/></Button><Select value={String(viewYear)} onValueChange={(next) => setViewYear(Number(next))}><SelectTrigger size="sm" aria-label="Chọn năm" className="w-28 font-bold"><SelectValue/></SelectTrigger><SelectContent className="max-h-64">{years.map((item) => <SelectItem key={item} value={String(item)}>{item}</SelectItem>)}</SelectContent></Select><Button variant="ghost" size="icon-sm" aria-label="Năm sau" disabled={viewYear >= lastYear} onClick={() => setViewYear((current) => current + 1)}><ChevronRight/></Button></div>
       <div className="grid grid-cols-3 gap-1">{monthNames.map((name, index) => <Button key={name} size="sm" variant={viewYear === year && index === month - 1 ? "default" : "ghost"} className="text-xs font-normal" onClick={() => { onChange(`${viewYear}-${String(index + 1).padStart(2, "0")}`); setOpen(false); }}>{name}</Button>)}</div>
     </PopoverContent>
   </Popover>;
