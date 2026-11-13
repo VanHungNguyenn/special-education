@@ -2,6 +2,17 @@
 
 Unit test mới chỉ có cho helper trong `src/lib` (`pnpm test`). Sau mỗi lần sửa giao diện, chụp ảnh màn hình bằng Playwright để xem lại kết quả theo [ui-guidelines.md](ui-guidelines.md).
 
+## Đăng nhập tự động
+
+Từ module `auth`, trang `/portal` cần đăng nhập. `screenshot`, `layout-check`, `a11y-check` và `auth-flow` tự đăng nhập qua `scripts/login.mjs` bằng `quanly@demo.local` / `demo2026`. Đổi tài khoản bằng biến `CHECK_EMAIL` / `CHECK_PASSWORD`. Vì vậy cần:
+
+1. Backend đang chạy (`./docker.sh dev` hoặc `pnpm start:dev` trong `backend/`).
+2. Đã có tài khoản demo: `cd backend && pnpm db:seed:demo`.
+
+Thiếu một trong hai thì script dừng ngay, kèm thông báo rõ ràng. Lưu ý: sai mật khẩu 5 lần thì tài khoản bị khóa 15 phút; Quản lý mở khóa bằng cách đặt lại mật khẩu trong tab Tài khoản.
+
+`pnpm auth-flow [baseUrl]` thử luồng đăng nhập trên trình duyệt thật: chưa đăng nhập thì bị chuyển hướng, đăng nhập, tải lại trang, kiểm tra cookie, đăng xuất.
+
 ## Chạy
 
 ```bash

@@ -6,8 +6,8 @@ Monorepo for a special-education center (Vietnamese UI): a public landing page p
 
 | Part | State |
 |---|---|
-| `frontend/` | Done enough to demo. Next.js 16, **mock data only, no persistence, mock login**. Has its own [CLAUDE.md](frontend/CLAUDE.md) and [docs/](frontend/docs/README.md). |
-| `backend/` | Module `platform` done: NestJS 12 + Prisma 7 + Postgres, health, error format, OpenAPI, Docker, CI. No business modules yet; next is `auth`. Its own [CLAUDE.md](backend/CLAUDE.md). Architecture: [docs/architecture.md](docs/architecture.md). Specs: [SPEC-backend.md](SPEC-backend.md) (module map) → `SPEC-<module>.md`. FE needs: [docs/backend-requirements.md](docs/backend-requirements.md). |
+| `frontend/` | Next.js 16. **Login, account menu and the manager-only Accounts tab use the real API**; classes, students and evaluations are still **mock data, reset on reload**. Has its own [CLAUDE.md](frontend/CLAUDE.md) and [docs/](frontend/docs/README.md). |
+| `backend/` | Modules `platform` and `auth` done: NestJS 12 + Prisma 7 + Postgres, sessions in httpOnly cookies, roles MANAGER/TEACHER, account management. Next is `audit`. Its own [CLAUDE.md](backend/CLAUDE.md). Architecture: [docs/architecture.md](docs/architecture.md). Specs: [SPEC-backend.md](SPEC-backend.md) (module map) → `SPEC-<module>.md`. FE needs: [docs/backend-requirements.md](docs/backend-requirements.md). |
 
 ## Layout
 
@@ -46,7 +46,7 @@ UI checks (`pnpm a11y-check`, `pnpm layout-check`, `pnpm screenshot`) need a run
 - FE reaches the API through `/api/*`, which `frontend/next.config.ts` rewrites to `BACKEND_URL` (baked in at build time; `http://backend:4000` in Docker).
 - All portal state and every mutation live in one hook: `frontend/src/features/school/use-school-management.ts`. Replacing its `useState` calls with API calls is the integration point; components receive data via props and don't need to change.
 - Types to mirror: `frontend/src/features/school/types.ts`. Criteria list and labels: `frontend/src/features/school/data.ts`.
-- Login is fake: `frontend/src/app/login/page.tsx` just redirects to `/portal`. The account menu (`components/school/account-menu.tsx`) shows a hard-coded user.
+- Auth is real: `frontend/src/proxy.ts` sends cookie-less `/portal` requests to `/login`; `features/auth` and `features/users` call the API through `lib/api/http-client.ts` with TanStack Query. Demo accounts: `cd backend && pnpm db:seed:demo` (`quanly@demo.local` / `demo2026`, teachers `linh@`, `thu@`, `trang@demo.local`). FE check scripts (`a11y-check`, `layout-check`, `screenshot`, `auth-flow`) need the backend running with those accounts.
 - Report export is `window.print()` today; SPEC.md plans to replace it with a backend download URL.
 
 ## Repo-wide rules

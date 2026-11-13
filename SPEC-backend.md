@@ -17,7 +17,7 @@ Thay dữ liệu giả của FE bằng backend thật cho một trung tâm:
 | Module id | Trách nhiệm | Phụ thuộc | Spec |
 |---|---|---|---|
 | `platform` | Khung NestJS, PostgreSQL + Prisma, cấu hình, định dạng lỗi, healthcheck, Docker, CI, nối FE → BE | — | [SPEC-platform.md](SPEC-platform.md) ✅ |
-| `auth` | Đăng nhập/đăng xuất, phiên, vai trò Quản lý/Giáo viên, quản lý tài khoản | platform | [SPEC-auth.md](SPEC-auth.md) |
+| `auth` | Đăng nhập/đăng xuất, phiên, vai trò Quản lý/Giáo viên, quản lý tài khoản | platform | [SPEC-auth.md](SPEC-auth.md) ✅ |
 | `audit` | Lịch sử chỉnh sửa (ai, khi nào, trước/sau) | auth | chưa viết |
 | `roster` | Lớp (gắn tài khoản giáo viên), học sinh (xóa mềm), phạm vi xem theo lớp | auth, audit | chưa viết |
 | `evaluations` | Danh mục tiêu chí (Quản lý thêm/sửa/ẩn, seed theo mẫu GDCN), phiếu tháng với snapshot tiêu chí, mục tiêu can thiệp + đánh giá, khóa/mở khóa | roster, audit | chưa viết |

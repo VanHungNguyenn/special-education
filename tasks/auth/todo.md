@@ -274,18 +274,20 @@ Definition of Done cho mọi task:
 
 **Dependencies:** F4 · **Scope:** M
 
-### F6: Tài liệu
+### F6: Tài liệu ✅
 
 **Acceptance criteria:**
-- [ ] `RUNNING.md`: seed demo, tài khoản demo, các lệnh kiểm tra cần BE chạy.
-- [ ] `docs/deployment.md`: lệnh tạo Quản lý đầu tiên trên server (email để placeholder), `COOKIE_SECURE`.
-- [ ] `backend/CLAUDE.md`: `@Public`, `@Roles`, `@CurrentUser`, helper `loginAs` trong e2e.
-- [ ] `frontend/CLAUDE.md` và `frontend/docs/*`: cấu trúc `lib/api`, `features/auth`, `features/users`; mục "đăng nhập giả lập" không còn nữa.
-- [ ] `docs/architecture.md`: hash mật khẩu bằng scrypt (thay cho argon2/bcrypt).
-- [ ] Không có link hỏng.
+- [x] `RUNNING.md`: seed demo, tài khoản demo, các lệnh kiểm tra cần BE chạy.
+- [x] `docs/deployment.md`: lệnh tạo Quản lý đầu tiên trên server (email để placeholder), `COOKIE_SECURE`.
+- [x] `backend/CLAUDE.md`: `@Public`, `@Roles`, `@CurrentUser`, helper `loginAs` trong e2e.
+- [x] `frontend/CLAUDE.md` và `frontend/docs/*`: cấu trúc `lib/api`, `features/auth`, `features/users`; mục "đăng nhập giả lập" không còn nữa.
+- [x] `docs/architecture.md`: hash mật khẩu bằng scrypt (thay cho argon2/bcrypt).
+- [x] Không có link hỏng.
+
+**Ghi chú khi làm:** Khi chạy lại toàn bộ kiểm tra, phát hiện build trên host (`pnpm build`, `pnpm db:seed*`) làm sập backend-dev: hai bên dùng chung `dist` và `.tsbuildinfo`. Đã sửa trong commit riêng (`fix(dev)`): volume `/app/dist` riêng cho container, `deleteOutDir: false`, `tsBuildInfoFile` nằm trong `dist`. Đã kiểm tra: build trên host xong, backend-dev vẫn trả về 200; hot reload vẫn chạy; image production vẫn build được.
 
 **Dependencies:** F5 · **Scope:** S
 
 ## Checkpoint hoàn thành
-- [ ] Success Criteria 1–7 của SPEC-auth.md
+- [x] Success Criteria 1–7 của SPEC-auth.md
 - [ ] Review với chủ dự án

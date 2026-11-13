@@ -51,7 +51,7 @@ frontend/
 | Route | Loại | Mô tả |
 |---|---|---|
 | `/` | Server component | Trang giới thiệu: hero, phương châm, 3 chương trình, một ngày tại trung tâm, footer |
-| `/login` | Client component | Form đăng nhập giả lập. Sau 450ms sẽ chuyển tới `/portal` |
+| `/login` | Client component | Đăng nhập thật qua `POST /api/v1/auth/login`, có "Ghi nhớ đăng nhập" (30 ngày); xong thì về `?next=` (chỉ nhận đường dẫn nội bộ) hoặc `/portal` |
 | `/portal` | Client component | Cổng quản lý gồm 3 tab |
 
 ### Cổng quản lý (`/portal`)
@@ -75,7 +75,7 @@ Toàn bộ state nằm trong hook `useSchoolManagement`. Hook được gọi m�
 - `query`, `classFilter`, `month`: bộ lọc dùng chung cho tab Học sinh và tab Báo cáo.
 - Các hàm: `saveClass`, `deleteClass`, `saveStudent`, `deleteStudent`, `updateRating`, `updateEvaluationStatus`.
 
-Dự án không dùng context, store hay API. Khi thêm backend, hook này là chỗ cần thay thế.
+Đăng nhập và tài khoản đã dùng API thật qua TanStack Query (`lib/api/`, `features/auth/`, `features/users/`); `src/proxy.ts` chuyển request vào `/portal` không có cookie phiên sang `/login`. Riêng lớp, học sinh, phiếu vẫn nằm trong hook này cho tới module `roster` và `evaluations`. Xem [docs/architecture.md §3](../../docs/architecture.md#3-frontend-tanstack-query--solid).
 
 ## Styling
 

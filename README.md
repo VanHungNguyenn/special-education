@@ -4,8 +4,8 @@
 
 ## Trạng thái
 
-- **Frontend** (`frontend/`): đã dựng xong giao diện, nhưng đang dùng dữ liệu giả. Đăng nhập là giả lập, tải lại trang là mất dữ liệu.
-- **Backend** (`backend/`): đã có nền tảng (NestJS 12, Prisma 7, PostgreSQL, Docker, CI). Chưa có module nghiệp vụ; module tiếp theo là đăng nhập (`auth`).
+- **Frontend** (`frontend/`): đăng nhập, menu tài khoản và tab Tài khoản (Quản lý) đã chạy với API thật. Lớp, học sinh, phiếu đánh giá vẫn là dữ liệu giả, tải lại trang là mất.
+- **Backend** (`backend/`): đã có nền tảng (NestJS 12, Prisma 7, PostgreSQL, Docker, CI) và module đăng nhập/tài khoản (`auth`). Module tiếp theo là lịch sử chỉnh sửa (`audit`).
 
 ## Đọc theo thứ tự
 
@@ -21,5 +21,7 @@
 cd frontend
 cp .env.example .env
 pnpm install
-pnpm dev        # http://localhost:3000, vào /login rồi bấm đăng nhập
+pnpm dev        # http://localhost:3000
 ```
+
+Đăng nhập cần backend và tài khoản demo, xem [RUNNING.md](RUNNING.md).

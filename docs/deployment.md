@@ -25,8 +25,22 @@ Chạy thử ở máy local: `./docker.sh` (bản giống production) hoặc `./
 | `BACKEND_IMAGE` | Có | `ghcr.io/<owner>/special-education-backend:latest` | |
 | `PORT` | Không | `3000` | Cổng FE mở ra ngoài |
 | `DATABASE_URL`, `DIRECT_URL` | Không | | Chỉ đặt khi dùng DB bên ngoài (xem phần Neon/Supabase) |
+| `COOKIE_SECURE` | Không | `false` | Mặc định cookie phiên có `Secure` khi production (server đã có HTTPS). Chỉ đặt `false` khi thử bản production qua HTTP ở host khác `localhost` |
 
 > **Đừng xóa volume.** `docker compose down -v` sẽ xóa toàn bộ dữ liệu, và hiện chưa có backup. `./docker.sh down` không bao giờ xóa volume.
+
+## Tài khoản Quản lý đầu tiên
+
+Chạy một lần sau lần deploy đầu tiên. Lệnh dùng code đã build trong image; chạy lại khi đã có Quản lý thì không tạo thêm.
+
+```bash
+cd /opt/special-education
+read -rsp "Mật khẩu Quản lý: " SEED_MANAGER_PASSWORD; echo
+docker compose exec -e SEED_MANAGER_EMAIL=<email-quan-ly> -e SEED_MANAGER_NAME="<Họ tên>" -e SEED_MANAGER_PASSWORD="$SEED_MANAGER_PASSWORD" backend node dist/cli/create-manager.js
+unset SEED_MANAGER_PASSWORD
+```
+
+Dùng `read -s` để mật khẩu không nằm trong lịch sử shell. Các tài khoản khác do Quản lý tạo trong tab **Tài khoản**. Dữ liệu demo (`seed-demo`) bị chặn trên production.
 
 ## CI/CD (`.github/workflows/deploy.yml`)
 

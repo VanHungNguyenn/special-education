@@ -15,7 +15,9 @@ pnpm test                                               # unit (Vitest), no DB
 pnpm test:e2e                                           # e2e against special_education_test; refuses DB names without _test
 pnpm build                                              # prisma generate + nest build
 pnpm db:migrate                                         # create a migration in dev
-pnpm db:seed / pnpm db:seed:demo / pnpm db:reset
+pnpm db:seed                                            # build + dist/cli/create-manager.js (needs SEED_MANAGER_*)
+pnpm db:seed:demo                                       # build + dist/cli/seed-demo.js (@demo.local, password demo2026; --clean removes them)
+pnpm db:reset
 ```
 
 Before reporting a task done: `pnpm lint && pnpm test && pnpm test:e2e && pnpm build`.
@@ -42,6 +44,13 @@ Each feature is `src/modules/<name>/` with four folders. Copy `src/modules/_temp
 - Never return Prisma records from the API.
 - Other modules use only what a module `exports`.
 - Prisma may be imported only in `src/prisma/` and `**/infrastructure/**`.
+
+## Auth (module `auth`)
+
+- Every route needs a session by default (global `SessionGuard`). Mark exceptions with `@Public()`; restrict with `@Roles('MANAGER')`; read the caller with `@CurrentUser()` / `@CurrentSession()`. Import these from `modules/auth/index.ts`, never from its internals.
+- Sessions: random token in the `sid` cookie, only its SHA-256 in the DB. Passwords: `crypto.scrypt` via the `PASSWORD_HASHER` port.
+- e2e: `createUser(app, { role })` and `loginAs(app, user)` in `test/utils/auth.ts` (returns a supertest agent with the cookie). Unit tests use the fakes in `test/fakes/auth-fakes.ts` (`FakeClock`, `FakeHasher`, in-memory repositories).
+- Scripts that boot Nest (`src/cli/*`) must run from the compiled build: tsx/esbuild drops decorator metadata, which breaks DI and env conversion.
 
 ## Errors and validation
 

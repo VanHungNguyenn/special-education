@@ -30,6 +30,19 @@ PORT=8080 ./docker.sh                           # đổi cổng FE
 BACKEND_PORT=4100 DB_PORT=5433 ./docker.sh dev  # đổi cổng BE và DB ở chế độ dev
 ```
 
+### Tài khoản để đăng nhập
+
+Lần đầu, tạo tài khoản demo (chỉ chạy được ngoài production):
+
+```bash
+cd backend && pnpm db:seed:demo          # quanly@demo.local, linh@ / thu@ / trang@demo.local — mật khẩu demo2026
+node dist/cli/seed-demo.js --clean       # xóa toàn bộ tài khoản @demo.local
+```
+
+Khi chạy bằng Docker dev, chạy lệnh trên trong máy (cổng DB 5432 đã mở), hoặc: `docker compose -f docker-compose.dev.yml exec backend pnpm db:seed:demo`.
+
+Sai mật khẩu 5 lần thì tài khoản bị khóa 15 phút. Quản lý mở khóa bằng cách đặt lại mật khẩu trong tab **Tài khoản**.
+
 ---
 
 ## 2. Chạy từng phần trên máy (không dùng Docker cho code)
@@ -68,6 +81,7 @@ Nếu backend chạy ở cổng khác (đổi `PORT` trong `backend/.env`), sử
 ```bash
 cd backend && pnpm lint && pnpm test && pnpm test:e2e && pnpm build
 cd frontend && pnpm build && pnpm test
+cd frontend && pnpm auth-flow && pnpm a11y-check && pnpm layout-check   # cần BE đang chạy + tài khoản demo
 ```
 
 e2e của backend dùng database `special_education_test` trong cùng container Postgres, không đụng dữ liệu dev.

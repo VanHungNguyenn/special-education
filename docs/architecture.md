@@ -259,11 +259,11 @@ frontend/src/
 
 | Chủ đề | Nguyên tắc |
 |---|---|
-| Bảo mật | Mật khẩu hash bằng argon2 (hoặc bcrypt). Cookie phiên đặt `httpOnly`, `secure`, `sameSite=lax`. Phân quyền kiểm tra ở server, không tin FE |
+| Bảo mật | Mật khẩu hash bằng `crypto.scrypt` có sẵn của Node (N=2^17, r=8, p=1; tham số lưu trong chuỗi hash). DB chỉ lưu SHA-256 của token phiên. Cookie phiên đặt `httpOnly`, `secure`, `sameSite=lax`. Phân quyền kiểm tra ở server, không tin FE |
 | Dữ liệu trẻ em | Giáo viên chỉ thấy lớp mình phụ trách. Mọi thay đổi đều có audit. Không ghi dữ liệu cá nhân của trẻ vào log |
 | Ngôn ngữ | Code, `code` lỗi, tên cột viết bằng tiếng Anh. Mọi thông báo cho người dùng viết bằng tiếng Việt |
 | Thời gian | Lưu thời điểm theo UTC. "Tháng hiện tại" tính theo múi giờ `Asia/Ho_Chi_Minh` |
 | Cấu hình | Tên trung tâm, địa chỉ, secret đọc từ biến môi trường. Không viết cứng |
 | Tính di động của DB | Chỉ dùng PostgreSQL chuẩn qua Prisma. Không dùng tính năng riêng của nhà cung cấp |
-| Dữ liệu thử | `pnpm db:seed` tạo tài khoản Quản lý đầu tiên. `pnpm db:seed:demo` tạo dữ liệu mẫu (lấy từ mock FE), có thể xóa sạch khi không cần |
+| Dữ liệu thử | `pnpm db:seed` (= `dist/cli/create-manager.js`) tạo tài khoản Quản lý đầu tiên. `pnpm db:seed:demo` tạo dữ liệu mẫu (`@demo.local`), `node dist/cli/seed-demo.js --clean` xóa sạch; bị chặn khi `NODE_ENV=production` |
 | Kiểm thử | Domain và use case dùng unit test (không DB). Endpoint dùng e2e với Postgres thật. FE dùng `pnpm build`, `a11y-check`, `screenshot` |

@@ -14,19 +14,25 @@ pnpm start
 pnpm screenshot   # Playwright screenshots of /, /login, /portal at 375/768/1440 (needs a running server)
 pnpm layout-check # overlap / tight-gap / overflow check of / and /login at 19 widths (needs a running server)
 pnpm a11y-check   # touch targets, contrast, text size, labels, keyboard on all pages at 375/768/1024/1440 (needs a running server)
-pnpm test         # unit tests (node:test) for helpers in src/lib
+pnpm test         # unit tests (node:test) for pure helpers (src/lib, features/*/redirect|account)
+pnpm auth-flow    # browser check: redirect → login → reload → logout (needs a running server)
 ```
 
-There is no lint yet; unit tests cover only the helpers in `src/lib/utils.ts`. After UI changes, run `pnpm a11y-check` and `pnpm screenshot` and look at the PNGs in `screenshots/`; see [docs/testing.md](docs/testing.md). Run Docker from the repo root (`..`) with `docker compose up --build`. CI/CD lives in `../.github/workflows/deploy.yml`.
+The check scripts log in through `scripts/login.mjs` as `quanly@demo.local` / `demo2026` (override with `CHECK_EMAIL` / `CHECK_PASSWORD`), so the backend must be running with demo data: `cd ../backend && pnpm db:seed:demo`. Five wrong passwords lock an account for 15 minutes; a manager unlocks it by resetting the password.
+
+There is no lint yet. Unit tests import `.ts` files directly with Node's type stripping, so keep tested files free of enums, parameter properties and `@/` imports. After UI changes, run `pnpm a11y-check` and `pnpm screenshot` and look at the PNGs in `screenshots/`; see [docs/testing.md](docs/testing.md). Run Docker from the repo root (`..`) with `docker compose up --build`. CI/CD lives in `../.github/workflows/deploy.yml`.
 
 ## Architecture
 
 - **Next.js 16 App Router + React 19.** Read `node_modules/next/dist/docs/` before using any Next API (see AGENTS.md).
 - Routes:
   - `src/app/page.tsx`: the landing page. A server component styled with `globals.css`.
-  - `src/app/login/page.tsx`: a **mock** login. Any submit redirects to `/portal`, and no auth happens.
-  - `src/app/portal/`: one client page (`page.tsx`) with three tabs: `classes`, `students`, `reports`. It reads the deep links `?tab=` and `?student=<id>` once, on mount.
-- State: all portal state lives in `useSchoolManagement` (`src/features/school/use-school-management.ts`), seeded from the mock data in `src/features/school/data.ts`. The portal is **not wired to the backend yet**, so a reload resets everything. The backend lives in `../backend`; `/api/*` is rewritten to `BACKEND_URL` (see `next.config.ts`). Wiring follows the TanStack Query plan in `../docs/architecture.md` §3, starting with the `auth` module.
+  - `src/app/login/page.tsx`: real login (`useLogin`), returns to a validated `?next=` path (`features/auth/redirect.ts`).
+  - `src/proxy.ts`: Next 16 proxy (ex-middleware). Requests to `/portal` without the `sid` cookie go to `/login?next=…`; the backend still decides if the session is valid.
+  - `src/app/portal/`: one client page (`page.tsx`) with tabs `classes`, `students`, `reports` and, for managers only, `accounts`. It reads the deep links `?tab=` and `?student=<id>` once, on mount.
+- Server state: TanStack Query (`../docs/architecture.md` §3). `lib/api/http-client.ts` (`request`, `ApiError`, `errorText`) → `features/<name>/api.ts` → `queries.ts` (hooks, `query-keys.ts`) → components. `lib/api/query-provider.tsx` sends `UNAUTHENTICATED` to `/login`. Done for `features/auth` (`useMe`, `useLogin`, `useLogout`, `useChangePassword`) and `features/users`.
+- Mock state: classes, students and evaluations still live in `useSchoolManagement` (`src/features/school/`), seeded from `data.ts`; a reload resets them. They move to TanStack Query with the `roster` and `evaluations` modules.
+- `/api/*` is rewritten to `BACKEND_URL` (`next.config.ts`, baked in at build time).
 - Folders:
   - `src/components/ui/`: **shadcn/ui components only** (new-york style on Radix, configured in `components.json`).
   - `src/components/common/`: compositions of shadcn primitives (`DatePicker`, `MonthPicker`, `Field`/`TextareaField`/`SelectField`).

@@ -1,6 +1,6 @@
 # Spec: Module `auth`
 
-Trạng thái: **đã duyệt** (2026-11-13). Plan: [tasks/auth/plan.md](tasks/auth/plan.md). Thuộc [SPEC-backend.md](SPEC-backend.md), phụ thuộc module `platform` (đã xong). Kiến trúc: [docs/architecture.md](docs/architecture.md).
+Trạng thái: **đã triển khai** (2026-11-13). Plan: [tasks/auth/plan.md](tasks/auth/plan.md). Thuộc [SPEC-backend.md](SPEC-backend.md), phụ thuộc module `platform` (đã xong). Kiến trúc: [docs/architecture.md](docs/architecture.md).
 
 ## Objective
 

@@ -31,9 +31,9 @@ pnpm dev               # http://localhost:3000
 
 ## Hạn chế hiện tại / TODO
 
-- **Đăng nhập giả lập:** form login không xác thực gì. Bấm đăng nhập là chuyển thẳng vào `/portal`. Tài khoản demo được điền sẵn (`giaovien@<domain>` / `demo2026`).
-- **Không có backend, không lưu dữ liệu:** toàn bộ dữ liệu là mock trong `src/features/school/data.ts` và chỉ nằm trong React state, nên tải lại trang là mất mọi thay đổi.
-- **Chưa phân quyền:** chưa có vai trò quản trị, giáo viên hay phụ huynh. Thông tin tài khoản trong menu đang cố định.
-- **Chưa có lint; unit test mới chỉ có cho các helper trong `src/lib/utils.ts` (`pnpm test`).** Giao diện được kiểm tra bằng `pnpm build`, `pnpm a11y-check` và `pnpm screenshot` (xem [testing.md](testing.md)).
+- **Đăng nhập thật** (module `auth`): cần backend chạy. Tài khoản demo tạo bằng `cd backend && pnpm db:seed:demo` (`quanly@demo.local` / `demo2026`). Xem [RUNNING.md](../../RUNNING.md).
+- **Lớp, học sinh, phiếu chưa lưu xuống backend:** vẫn là mock trong `src/features/school/data.ts`, chỉ nằm trong React state, nên tải lại trang là mất thay đổi. Sẽ nối API ở module `roster` và `evaluations`.
+- **Phân quyền:** Quản lý và Giáo viên. Tab Tài khoản chỉ Quản lý thấy. Giáo viên hiện vẫn thấy mọi lớp (giới hạn theo lớp đến cùng module `roster`).
+- **Chưa có lint.** Unit test (`pnpm test`) cho các hàm thuần trong `src/lib` và `src/features`. Giao diện kiểm tra bằng `pnpm build`, `pnpm a11y-check`, `pnpm layout-check`, `pnpm screenshot` và `pnpm auth-flow` (xem [testing.md](testing.md)); các lệnh này tự đăng nhập nên cần backend đang chạy.
 - Hình minh họa ở hero đang được vẽ bằng CSS, chỉ là tạm thời; nên thay bằng ảnh thật của trung tâm.
 - Tháng mặc định của phiếu đánh giá đang cố định là `2026-07`.
