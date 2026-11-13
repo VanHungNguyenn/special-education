@@ -71,6 +71,32 @@ describe('auth (e2e)', () => {
     });
   });
 
+  describe('lockout and timing', () => {
+    it('locks the account after five wrong passwords, even for the right one', async () => {
+      for (let i = 0; i < 5; i++) await api().post('/api/v1/auth/login').send({ email: teacher.email, password: 'sai-mat-khau' }).expect(401);
+      const response = await api().post('/api/v1/auth/login').send({ email: teacher.email, password: teacher.password }).expect(423);
+      expect(response.body.error.code).toBe('ACCOUNT_LOCKED');
+      expect(response.body.error.message).toMatch(/15 phút/);
+    });
+
+    it('takes about as long for an unknown email as for a wrong password', async () => {
+      const time = async (email: string) => {
+        const started = performance.now();
+        await api().post('/api/v1/auth/login').send({ email, password: 'sai-mat-khau' }).expect(401);
+        return performance.now() - started;
+      };
+      await time('warmup@test.local');
+      const average = async (email: string) => {
+        let total = 0;
+        for (let i = 0; i < 4; i++) total += await time(email);
+        return total / 4;
+      };
+      const unknown = await average('khong-ton-tai@test.local');
+      const wrong = await average(teacher.email);
+      expect(Math.abs(unknown - wrong) / Math.max(unknown, wrong)).toBeLessThan(0.5);
+    });
+  });
+
   describe('session guard', () => {
     it('rejects /auth/me without a cookie or with a forged one', async () => {
       await api().get('/api/v1/auth/me').expect(401, { error: { code: 'UNAUTHENTICATED', message: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', details: [] } });

@@ -75,7 +75,7 @@ Definition of Done cho mọi task:
 **Files:** `src/modules/auth/{application,infrastructure,http}/*`, `auth.module.ts`, `src/app.module.ts`, `src/app.setup.ts`, `src/config/env.validation.ts`, `test/utils/auth.ts`, `test/auth.e2e-spec.ts`, `test/template.e2e-spec.ts`
 **Scope:** L (nhiều file nhỏ; không tách được vì guard và đăng nhập phải có cùng lúc thì e2e mới chạy được)
 
-### B3: Khóa sau 5 lần sai, thời gian phản hồi đồng đều
+### B3: Khóa sau 5 lần sai, thời gian phản hồi đồng đều ✅
 
 **Description:** Nối quy tắc khóa của domain vào `Login`:
 - ghi lại số lần sai;
@@ -83,9 +83,11 @@ Definition of Done cho mọi task:
 - chạy hash giả khi email không tồn tại.
 
 **Acceptance criteria:**
-- [ ] e2e: 5 lần sai, lần 6 dù đúng mật khẩu vẫn nhận 423, message có số phút.
-- [ ] Unit (với `Clock` giả): sau 15 phút thì đăng nhập được.
-- [ ] e2e: thời gian trung bình (5 lần) giữa email không tồn tại và sai mật khẩu chênh nhau dưới 50%.
+- [x] e2e: 5 lần sai, lần 6 dù đúng mật khẩu vẫn nhận 423, message có số phút.
+- [x] Unit (với `Clock` giả): sau 15 phút thì đăng nhập được.
+- [x] e2e: thời gian trung bình (5 lần) giữa email không tồn tại và sai mật khẩu chênh nhau dưới 50%.
+
+**Ghi chú khi làm:** Phần hiện thực đã có từ B1–B2, nên các test này qua ngay từ lần chạy đầu: chúng là bằng chứng, không phải TDD đỏ trước. Thêm bản giả trong `test/fakes/auth-fakes.ts` (repository trong bộ nhớ, `FakeClock`, `FakeHasher`) để unit test use case. Test thời gian phản hồi dùng 4 lần sai, ít hơn ngưỡng khóa, để tài khoản không bị khóa giữa chừng.
 
 **Dependencies:** B2 · **Scope:** S
 
