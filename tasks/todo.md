@@ -54,17 +54,17 @@ Xóa controller/service mẫu do CLI sinh ra. Không tạo thư mục rỗng (gi
 **Files likely touched:** `backend/package.json`, `backend/pnpm-workspace.yaml`, `backend/src/main.ts`, `backend/src/app.module.ts`, `backend/tsconfig.json`
 **Estimated scope:** M
 
-### T3: Config: kiểm tra biến môi trường, dừng app ngay nếu sai
+### T3: Config: kiểm tra biến môi trường, dừng app ngay nếu sai ✅
 
-**Description:** Dùng `@nestjs/config` với hàm `validate()` dựa trên `class-validator`. Các biến: `NODE_ENV`, `PORT`, `DATABASE_URL`, `DIRECT_URL`. Code khác lấy config qua service có kiểu, không đọc `process.env` trực tiếp.
+**Description:** Dùng `@nestjs/config` với hàm `validate()` dựa trên `class-validator`. Các biến: `NODE_ENV`, `PORT`, `DATABASE_URL`, `DIRECT_URL`. Code khác lấy config qua `ConfigService<Env, true>` (`get('PORT', { infer: true })`), không đọc `process.env` trực tiếp. Không cần `config.module.ts` riêng: `ConfigModule.forRoot({ validate: validateEnv })` đặt thẳng trong `AppModule`. Ngoại lệ duy nhất: logger trong `main.ts` đọc `process.env.NODE_ENV`, vì logger được tạo trước khi config được nạp.
 
 **Acceptance criteria:**
-- [ ] Thiếu hoặc sai một biến thì app dừng, với thông báo nêu đúng tên biến.
-- [ ] Có `backend/.env.example` (chỉ giá trị giả) và `backend/.env.test.example`.
-- [ ] Có unit test cho `validate()`. Bỏ `passWithNoTests` trong `vitest.config.ts`.
+- [x] Thiếu hoặc sai một biến thì app dừng, với thông báo nêu đúng tên biến.
+- [x] Có `backend/.env.example` (chỉ giá trị giả) và `backend/.env.test.example`.
+- [x] Có unit test cho `validate()`. Bỏ `passWithNoTests` trong `vitest.config.ts`.
 
 **Verification:**
-- [ ] `pnpm test`
+- [x] `pnpm test`
 - [ ] Xóa `DATABASE_URL` khỏi `.env`, chạy `pnpm start:dev`: app dừng và nêu đúng `DATABASE_URL`.
 
 **Dependencies:** T2
