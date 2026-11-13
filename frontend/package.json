@@ -10,7 +10,7 @@
     "screenshot": "node scripts/screenshot.mjs",
     "layout-check": "node scripts/layout-check.mjs",
     "a11y-check": "node scripts/a11y-check.mjs",
-    "test": "node --test scripts/"
+    "test": "node --test scripts/*.test.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
