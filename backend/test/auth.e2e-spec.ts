@@ -114,6 +114,26 @@ describe('auth (e2e)', () => {
     });
   });
 
+  describe('PUT /auth/me/password', () => {
+    it('rejects a wrong current password and a too-short new one', async () => {
+      const agent = await loginAs(app, teacher);
+      const wrong = await agent.put('/api/v1/auth/me/password').send({ currentPassword: 'sai-mat-khau', newPassword: 'mat-khau-moi-1' }).expect(400);
+      expect(wrong.body.error.code).toBe('WRONG_PASSWORD');
+      const short = await agent.put('/api/v1/auth/me/password').send({ currentPassword: teacher.password, newPassword: 'ngan' }).expect(400);
+      expect(short.body.error.code).toBe('VALIDATION_FAILED');
+    });
+
+    it('changes the password and signs out every other session', async () => {
+      const current = await loginAs(app, teacher);
+      const other = await loginAs(app, teacher);
+      await current.put('/api/v1/auth/me/password').send({ currentPassword: teacher.password, newPassword: 'mat-khau-moi-1' }).expect(204);
+      await current.get('/api/v1/auth/me').expect(200);
+      await other.get('/api/v1/auth/me').expect(401);
+      await api().post('/api/v1/auth/login').send({ email: teacher.email, password: teacher.password }).expect(401);
+      await api().post('/api/v1/auth/login').send({ email: teacher.email, password: 'mat-khau-moi-1' }).expect(200);
+    });
+  });
+
   describe('POST /auth/logout', () => {
     it('ends the session and clears the cookie', async () => {
       const login = await api().post('/api/v1/auth/login').send({ email: teacher.email, password: teacher.password }).expect(200);

@@ -1,6 +1,6 @@
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
-import { PASSWORD_MAX_LENGTH } from '../domain/password-policy.js';
+import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString, Length, MaxLength } from 'class-validator';
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '../domain/password-policy.js';
 import type { Role, User } from '../domain/user.js';
 
 export const trim = () => Transform(({ value }: { value: unknown }) => (typeof value === 'string' ? value.trim() : value));
@@ -19,6 +19,20 @@ export class LoginRequest {
   @IsOptional()
   @IsBoolean({ message: 'Giá trị ghi nhớ đăng nhập không hợp lệ.' })
   remember?: boolean;
+}
+
+export const newPassword = () =>
+  Length(PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, { message: `Mật khẩu phải có từ ${PASSWORD_MIN_LENGTH} đến ${PASSWORD_MAX_LENGTH} ký tự.` });
+
+export class ChangePasswordRequest {
+  @MaxLength(PASSWORD_MAX_LENGTH, { message: 'Mật khẩu quá dài.' })
+  @IsNotEmpty({ message: 'Vui lòng nhập mật khẩu hiện tại.' })
+  @IsString({ message: 'Mật khẩu phải là chuỗi.' })
+  currentPassword: string;
+
+  @newPassword()
+  @IsString({ message: 'Mật khẩu phải là chuỗi.' })
+  newPassword: string;
 }
 
 export class UserResponse {

@@ -91,15 +91,15 @@ Definition of Done cho mọi task:
 
 **Dependencies:** B2 · **Scope:** S
 
-### B4: Tự đổi mật khẩu
+### B4: Tự đổi mật khẩu ✅
 
 **Description:** `PUT /auth/me/password` `{ currentPassword, newPassword }`. Đổi xong thì xóa mọi phiên khác của người đó, giữ phiên hiện tại.
 
 **Acceptance criteria:**
-- [ ] e2e:
+- [x] e2e:
   - sai mật khẩu hiện tại: `400 WRONG_PASSWORD`;
   - mật khẩu mới dưới 8 ký tự: `400 VALIDATION_FAILED`.
-- [ ] e2e: hai phiên A và B; đổi mật khẩu bằng A thì B nhận 401, A vẫn dùng được. Mật khẩu mới đăng nhập được, mật khẩu cũ thì không.
+- [x] e2e: hai phiên A và B; đổi mật khẩu bằng A thì B nhận 401, A vẫn dùng được. Mật khẩu mới đăng nhập được, mật khẩu cũ thì không.
 
 **Dependencies:** B2 · **Scope:** S
 

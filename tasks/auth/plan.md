@@ -32,7 +32,7 @@ F1 lib/api + TanStack ─ F2 login + proxy ─ F3 menu tài khoản ─ F4 tab T
 - [x] B1: Domain `User`/`Session`, mật khẩu, schema + migration
 - [x] B2: Đăng nhập, `me`, đăng xuất, guard toàn cục
 - [x] B3: Khóa sau 5 lần sai, thời gian phản hồi đồng đều
-- [ ] B4: Tự đổi mật khẩu
+- [x] B4: Tự đổi mật khẩu
 - [ ] B5: `RolesGuard`, danh sách và tạo tài khoản
 - [ ] B6: Sửa, vô hiệu hóa, đặt lại mật khẩu, quy tắc Quản lý cuối cùng
 - [ ] B7: Seed, CLI tạo Quản lý, seed demo, dọn phiên hết hạn

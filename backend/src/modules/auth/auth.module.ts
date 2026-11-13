@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthenticateSessionUseCase } from './application/authenticate-session.use-case.js';
+import { ChangeOwnPasswordUseCase } from './application/change-own-password.use-case.js';
 import { LoginUseCase } from './application/login.use-case.js';
 import { LogoutUseCase } from './application/logout.use-case.js';
 import { CLOCK, PASSWORD_HASHER, SESSION_REPOSITORY, USER_REPOSITORY } from './domain/ports.js';
@@ -22,6 +23,7 @@ import { SystemClock } from './infrastructure/system-clock.js';
     LoginUseCase,
     AuthenticateSessionUseCase,
     LogoutUseCase,
+    ChangeOwnPasswordUseCase,
     SessionCookie,
     { provide: APP_GUARD, useClass: SessionGuard },
   ],

@@ -1,10 +1,11 @@
-import { Body, Controller, Get, HttpCode, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Put, Res } from '@nestjs/common';
 import type { Response } from 'express';
+import { ChangeOwnPasswordUseCase } from '../application/change-own-password.use-case.js';
 import { LoginUseCase } from '../application/login.use-case.js';
 import { LogoutUseCase } from '../application/logout.use-case.js';
 import type { Session } from '../domain/session.js';
 import type { User } from '../domain/user.js';
-import { LoginRequest, UserResponse } from './auth.dto.js';
+import { ChangePasswordRequest, LoginRequest, UserResponse } from './auth.dto.js';
 import { CurrentSession, CurrentUser, Public } from './decorators.js';
 import { SessionCookie } from './session-cookie.js';
 
@@ -13,6 +14,7 @@ export class AuthController {
   constructor(
     private readonly login: LoginUseCase,
     private readonly logout: LogoutUseCase,
+    private readonly changeOwnPassword: ChangeOwnPasswordUseCase,
     private readonly cookie: SessionCookie,
   ) {}
 
@@ -29,6 +31,12 @@ export class AuthController {
   @Get('me')
   me(@CurrentUser() user: User): UserResponse {
     return UserResponse.from(user);
+  }
+
+  @Put('me/password')
+  @HttpCode(204)
+  async changePassword(@CurrentUser() user: User, @CurrentSession() session: Session, @Body() body: ChangePasswordRequest): Promise<void> {
+    await this.changeOwnPassword.execute({ user, sessionId: session.id, currentPassword: body.currentPassword, newPassword: body.newPassword });
   }
 
   @Post('logout')
