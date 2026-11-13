@@ -214,25 +214,27 @@ Module này chỉ được đăng ký khi `NODE_ENV=test`. Thêm rule oxlint: `*
 **Files likely touched:** `backend/src/modules/_template/**` (khoảng 7 file nhỏ, mỗi file một vai trò), `backend/test/template.e2e-spec.ts`, `backend/oxlint.json`
 **Estimated scope:** M
 
-### T9: OpenAPI tại `/api/v1/docs`
+### T9: OpenAPI tại `/api/v1/docs` ✅
 
 **Description:** Dùng `@nestjs/swagger` để sinh tài liệu từ controller và DTO. Chỉ bật khi `NODE_ENV` khác `production`. Bật plugin CLI của swagger để không phải gắn decorator thủ công cho từng trường DTO.
 
 **Acceptance criteria:**
-- [ ] Ở dev, `/api/v1/docs` hiện health (và `_template` khi `NODE_ENV=test`). Ở production trả về 404.
-- [ ] `/api/v1/docs-json` trả về OpenAPI JSON. FE sẽ tra file này khi viết kiểu dữ liệu.
+- [x] Ở dev, `/api/v1/docs` hiện health (và `_template` khi `NODE_ENV=test`). Ở production trả về 404.
+- [x] `/api/v1/docs-json` trả về OpenAPI JSON. FE sẽ tra file này khi viết kiểu dữ liệu.
 
 **Verification:**
-- [ ] `pnpm build`
-- [ ] `curl` hai route trên ở dev, và với `NODE_ENV=production`.
+- [x] `pnpm build`
+- [x] `curl` hai route trên ở dev, và với `NODE_ENV=production`.
+
+**Ghi chú khi làm:** `@nestjs/swagger` 12.0.5. Chặn script cài đặt của `@scarf/scarf` (gửi dữ liệu thống kê sử dụng, đi kèm `swagger-ui-dist`). Plugin CLI sinh schema từ DTO, đọc được cả `@MaxLength`. Plugin chỉ chạy khi `nest build`, nên trong Vitest schema DTO không có; e2e chỉ kiểm tra path.
 
 **Dependencies:** T8
 **Files likely touched:** `backend/src/app.setup.ts`, `backend/nest-cli.json`, `backend/package.json`
 **Estimated scope:** S
 
 ## Checkpoint B
-- [ ] `pnpm lint && pnpm test && pnpm test:e2e && pnpm build` không lỗi
-- [ ] Dừng `db` thì health trả về 503
+- [x] `pnpm lint && pnpm test && pnpm test:e2e && pnpm build` không lỗi
+- [x] Dừng `db` thì health trả về 503
 - [ ] **Chủ dự án review `_template`** trước khi các module sau sao chép
 
 ## Phase 3: Docker

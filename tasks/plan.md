@@ -84,11 +84,11 @@ T3 và T4 độc lập với nhau. T14 có thể viết song song từ sau T12.
 - [x] T6: Khung e2e (DB test, tạo app, reset)
 - [x] T7: Healthcheck có kiểm tra DB
 - [x] T8: Module mẫu `_template` (4 lớp)
-- [ ] T9: OpenAPI tại `/api/v1/docs`
+- [x] T9: OpenAPI tại `/api/v1/docs`
 
 ### Checkpoint B
-- [ ] `pnpm lint && pnpm test && pnpm test:e2e && pnpm build` không lỗi
-- [ ] Dừng container `db` thì health trả về 503
+- [x] `pnpm lint && pnpm test && pnpm test:e2e && pnpm build` không lỗi
+- [x] Dừng container `db` thì health trả về 503
 - [ ] **Chủ dự án review `_template`** trước khi các module sau sao chép
 
 ### Phase 3: Docker
