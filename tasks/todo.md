@@ -29,7 +29,7 @@ Mọi task đều phải qua Definition of Done chung:
 **Files likely touched:** `tasks/plan.md`
 **Estimated scope:** XS
 
-### T2: Tạo project NestJS trong `backend/`
+### T2: Tạo project NestJS trong `backend/` ✅
 
 **Description:** Khởi tạo bằng `pnpm dlx @nestjs/cli@12 new backend --package-manager pnpm --strict --skip-git`. Script `lint` phải chạy `oxlint -c oxlint.json` (xem kết luận T1). Phải có `--skip-git`, nếu không CLI sẽ tạo repo git lồng trong repo hiện tại.
 
@@ -39,16 +39,16 @@ Thiết lập:
 - `enableShutdownHooks()`;
 - logger JSON khi `NODE_ENV=production` (`ConsoleLogger` của Nest 11 có tùy chọn `json`).
 
-Xóa controller/service mẫu do CLI sinh ra. Tạo sẵn cây thư mục rỗng theo spec.
+Xóa controller/service mẫu do CLI sinh ra. Không tạo thư mục rỗng (git không lưu thư mục rỗng); mỗi thư mục xuất hiện cùng task tạo ra file đầu tiên trong đó. Tạm bật `passWithNoTests` trong hai file cấu hình Vitest; T3 (unit) và T6 (e2e) bỏ cờ này khi đã có test thật.
 
 **Acceptance criteria:**
-- [ ] `pnpm start:dev` chạy ở `http://localhost:4000`. `backend/` không có thư mục `.git` riêng.
-- [ ] `package.json` có đủ các script `lint`, `test`, `test:e2e`, `build` và `start:dev`.
-- [ ] Với `NODE_ENV=production`, log in ra dạng JSON mỗi dòng.
+- [x] `pnpm start:dev` chạy ở `http://localhost:4000`. `backend/` không có thư mục `.git` riêng.
+- [x] `package.json` có đủ các script `lint`, `test`, `test:e2e`, `build` và `start:dev`.
+- [x] Với `NODE_ENV=production`, log in ra dạng JSON mỗi dòng.
 
 **Verification:**
-- [ ] `pnpm lint && pnpm test && pnpm build`
-- [ ] `test ! -d backend/.git`
+- [x] `pnpm lint && pnpm test && pnpm build`
+- [x] `test ! -d backend/.git`
 
 **Dependencies:** T1
 **Files likely touched:** `backend/package.json`, `backend/pnpm-workspace.yaml`, `backend/src/main.ts`, `backend/src/app.module.ts`, `backend/tsconfig.json`
@@ -61,7 +61,7 @@ Xóa controller/service mẫu do CLI sinh ra. Tạo sẵn cây thư mục rỗng
 **Acceptance criteria:**
 - [ ] Thiếu hoặc sai một biến thì app dừng, với thông báo nêu đúng tên biến.
 - [ ] Có `backend/.env.example` (chỉ giá trị giả) và `backend/.env.test.example`.
-- [ ] Có unit test cho `validate()`.
+- [ ] Có unit test cho `validate()`. Bỏ `passWithNoTests` trong `vitest.config.ts`.
 
 **Verification:**
 - [ ] `pnpm test`
@@ -142,6 +142,7 @@ Xóa controller/service mẫu do CLI sinh ra. Tạo sẵn cây thư mục rỗng
 - [ ] `pnpm test:e2e` chạy được với DB test.
 - [ ] Trỏ `.env.test` sang DB không có hậu tố `_test` thì e2e dừng ngay, kèm thông báo rõ.
 - [ ] `main.ts` và test app dùng chung `configureApp`.
+- [ ] Bỏ `passWithNoTests` trong `vitest.config.e2e.ts`.
 
 **Verification:**
 - [ ] `pnpm test:e2e`

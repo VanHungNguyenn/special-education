@@ -71,7 +71,7 @@ T3 và T4 độc lập với nhau. T14 có thể viết song song từ sau T12.
 
 ### Phase 1: Khung ứng dụng
 - [x] T1: Spike: xác minh Next rewrite, Prisma, pnpm build scripts
-- [ ] T2: Tạo project NestJS trong `backend/`
+- [x] T2: Tạo project NestJS trong `backend/`
 - [ ] T3: Config: kiểm tra biến môi trường, dừng app ngay nếu sai
 - [ ] T4: Định dạng lỗi chung
 
