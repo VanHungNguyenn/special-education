@@ -239,7 +239,7 @@ Module này chỉ được đăng ký khi `NODE_ENV=test`. Thêm rule oxlint: `*
 
 ## Phase 3: Docker
 
-### T10: Dockerfile backend + `docker-compose.yml`
+### T10: Dockerfile backend + `docker-compose.yml` ✅
 
 **Description:**
 - Dockerfile multi-stage, dùng node:22-alpine:
@@ -253,14 +253,20 @@ Module này chỉ được đăng ký khi `NODE_ENV=test`. Thêm rule oxlint: `*
 - Thêm `.env.example` ở gốc repo.
 
 **Acceptance criteria:**
-- [ ] Chạy `docker compose up --build -d` thì cả 3 container đều `healthy`.
-- [ ] Image backend không chứa `src/` hay devDependencies, trừ CLI `prisma`.
-- [ ] Chỉ cổng 3000 được publish ra host.
-- [ ] Làm hỏng thử một migration thì container backend không lên và log nêu rõ lỗi. Thử xong thì bỏ.
+- [x] Chạy `docker compose up --build -d` thì cả 3 container đều `healthy`.
+- [x] Image backend không chứa `src/` hay devDependencies, trừ CLI `prisma`.
+- [x] Chỉ cổng 3000 được publish ra host.
+- [x] Làm hỏng thử một migration thì container backend không lên và log nêu rõ lỗi. Thử xong thì bỏ.
 
 **Verification:**
-- [ ] `docker compose ps` thấy cả 3 `healthy`; `docker compose exec backend wget -qO- localhost:4000/api/v1/health`.
-- [ ] `docker run --rm --entrypoint ls <image> /app` không có `src`.
+- [x] `docker compose ps` thấy cả 3 `healthy`; `docker compose exec backend wget -qO- localhost:4000/api/v1/health`.
+- [x] `docker run --rm --entrypoint ls <image> /app` không có `src`.
+
+**Ghi chú khi làm:**
+- `DATABASE_URL` và `DIRECT_URL` trong compose có giá trị mặc định trỏ tới service `db`. Đặt hai biến này trong `.env` (Neon/Supabase) thì ghi đè được mà không sửa file.
+- Mật khẩu Postgres nên chỉ gồm chữ và số, vì nó nằm trong URL kết nối.
+- Image chạy bằng user `node`. Đã thử: migration lỗi thì container thoát với mã 1 (`P3018`) và app không khởi động. Phép thử dùng image và DB tạm, đã dọn sạch.
+- Image backend nặng 746MB, phần lớn do CLI `prisma` kéo theo Studio, pglite, effect (khoảng 150MB). Việc tối ưu (chạy migration bằng image riêng) để sau.
 
 **Dependencies:** T7
 **Files likely touched:** `backend/Dockerfile`, `backend/.dockerignore`, `docker-compose.yml`, `.env.example`

@@ -92,7 +92,7 @@ T3 và T4 độc lập với nhau. T14 có thể viết song song từ sau T12.
 - [ ] **Chủ dự án review `_template`** trước khi các module sau sao chép
 
 ### Phase 3: Docker
-- [ ] T10: Dockerfile backend + `docker-compose.yml`
+- [x] T10: Dockerfile backend + `docker-compose.yml`
 - [ ] T11: FE rewrite `/api/*` → backend
 - [ ] T12: `docker-compose.dev.yml` + `docker.sh`
 
