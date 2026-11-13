@@ -162,19 +162,21 @@ Xóa controller/service mẫu do CLI sinh ra. Không tạo thư mục rỗng (gi
 **Files likely touched:** `backend/vitest.config.e2e.ts`, `backend/test/global-setup.ts`, `backend/test/utils/create-test-app.ts`, `backend/test/utils/reset-db.ts`, `backend/src/app.setup.ts`
 **Estimated scope:** M
 
-### T7: Healthcheck có kiểm tra DB
+### T7: Healthcheck có kiểm tra DB ✅
 
 **Description:** `GET /api/v1/health` chạy `SELECT 1` với timeout 2 giây:
 - thành công: `200 { status: "ok", db: "ok" }`;
 - thất bại: `503 { status: "error", db: "down" }`.
 
 **Acceptance criteria:**
-- [ ] Có e2e: DB sống thì trả về 200.
-- [ ] Có e2e: app dựng với `DATABASE_URL` trỏ tới cổng không có DB thì trả về 503 trong vòng dưới 3 giây.
+- [x] Có e2e: DB sống thì trả về 200.
+- [x] Có e2e: app dựng với `DATABASE_URL` trỏ tới cổng không có DB thì trả về 503 trong vòng dưới 3 giây.
 
 **Verification:**
-- [ ] `pnpm test:e2e`
-- [ ] Dừng container `db`, gọi `curl` health: nhận 503.
+- [x] `pnpm test:e2e`
+- [x] Dừng container `db`, gọi `curl` health: nhận 503.
+
+**Ghi chú khi làm:** `createTestApp` nhận thêm hàm `customize` để thay provider trong test. Đã kiểm tra bằng tay: dừng `db` thì nhận 503 sau 6ms; host không phản hồi (10.255.255.1) thì nhận 503 sau 2,01 giây.
 
 **Dependencies:** T6
 **Files likely touched:** `backend/src/health/health.controller.ts`, `backend/src/health/health.module.ts`, `backend/test/health.e2e-spec.ts`

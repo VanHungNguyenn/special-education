@@ -82,7 +82,7 @@ T3 và T4 độc lập với nhau. T14 có thể viết song song từ sau T12.
 ### Phase 2: Database và khung module
 - [x] T5: Postgres trong Docker dev + Prisma
 - [x] T6: Khung e2e (DB test, tạo app, reset)
-- [ ] T7: Healthcheck có kiểm tra DB
+- [x] T7: Healthcheck có kiểm tra DB
 - [ ] T8: Module mẫu `_template` (4 lớp)
 - [ ] T9: OpenAPI tại `/api/v1/docs`
 
