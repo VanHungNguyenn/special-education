@@ -71,7 +71,7 @@ Xóa controller/service mẫu do CLI sinh ra. Không tạo thư mục rỗng (gi
 **Files likely touched:** `backend/src/config/env.validation.ts`, `backend/src/config/env.validation.spec.ts`, `backend/src/config/config.module.ts`, `backend/.env.example`, `backend/.env.test.example`
 **Estimated scope:** S
 
-### T4: Định dạng lỗi chung
+### T4: Định dạng lỗi chung ✅
 
 **Description:** Mọi lỗi trả về dạng `{ error: { code, message, details } }`.
 - `DomainError(code, message, status)` là class TypeScript thuần, không phụ thuộc Nest.
@@ -82,21 +82,23 @@ Xóa controller/service mẫu do CLI sinh ra. Không tạo thư mục rỗng (gi
   - lỗi không lường trước: `500 INTERNAL_ERROR`, chỉ ghi stack vào log.
 
 **Acceptance criteria:**
-- [ ] Unit test cho filter: `DomainError`, `HttpException` và `Error` thường, mỗi loại ra đúng status và body.
-- [ ] Response 500 không chứa stack trace hay message gốc.
-- [ ] `domain-error.ts` không import gì từ `@nestjs/*`.
+- [x] Unit test cho filter: `DomainError`, `HttpException` và `Error` thường, mỗi loại ra đúng status và body.
+- [x] Response 500 không chứa stack trace hay message gốc.
+- [x] `domain-error.ts` không import gì từ `@nestjs/*`.
 
 **Verification:**
-- [ ] `pnpm test`
-- [ ] `curl -s localhost:4000/api/v1/khong-ton-tai` trả về 404 đúng dạng.
+- [x] `pnpm test`
+- [x] `curl -s localhost:4000/api/v1/khong-ton-tai` trả về 404 đúng dạng.
+
+**Ghi chú khi làm:** `DomainError` có thêm `details` (validation dùng lại chính nó, nên filter chỉ cần xử lý một loại lỗi nghiệp vụ). Request ngoài prefix `/api/v1` vẫn nhận trang 404 HTML mặc định của Express; chấp nhận được, vì FE chỉ chuyển tiếp `/api/*`. Cổng 4000 trên máy dev đang bị một dự án khác chiếm, nên kiểm tra bằng tay dùng `PORT=4100`.
 
 **Dependencies:** T2
 **Files likely touched:** `backend/src/common/errors/domain-error.ts`, `backend/src/common/errors/http-exception.filter.ts`, `backend/src/common/errors/http-exception.filter.spec.ts`, `backend/src/common/http/validation.pipe.ts`, `backend/src/main.ts`
 **Estimated scope:** M
 
 ## Checkpoint A
-- [ ] `pnpm lint && pnpm test && pnpm build` không lỗi
-- [ ] Route lạ trả về 404 đúng định dạng lỗi
+- [x] `pnpm lint && pnpm test && pnpm build` không lỗi
+- [x] Route lạ trả về 404 đúng định dạng lỗi
 
 ## Phase 2: Database và khung module
 

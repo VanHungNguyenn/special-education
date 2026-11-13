@@ -73,11 +73,11 @@ T3 và T4 độc lập với nhau. T14 có thể viết song song từ sau T12.
 - [x] T1: Spike: xác minh Next rewrite, Prisma, pnpm build scripts
 - [x] T2: Tạo project NestJS trong `backend/`
 - [x] T3: Config: kiểm tra biến môi trường, dừng app ngay nếu sai
-- [ ] T4: Định dạng lỗi chung
+- [x] T4: Định dạng lỗi chung
 
 ### Checkpoint A
-- [ ] `pnpm lint && pnpm test && pnpm build` trong `backend/` không lỗi
-- [ ] `curl localhost:4000/api/v1/khong-ton-tai` trả về 404 đúng định dạng lỗi
+- [x] `pnpm lint && pnpm test && pnpm build` trong `backend/` không lỗi
+- [x] `curl localhost:4000/api/v1/khong-ton-tai` trả về 404 đúng định dạng lỗi
 
 ### Phase 2: Database và khung module
 - [ ] T5: Postgres trong Docker dev + Prisma
