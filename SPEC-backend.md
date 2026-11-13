@@ -16,8 +16,8 @@ Thay dữ liệu giả của FE bằng backend thật cho một trung tâm:
 
 | Module id | Trách nhiệm | Phụ thuộc | Spec |
 |---|---|---|---|
-| `platform` | Khung NestJS, PostgreSQL + Prisma, cấu hình, định dạng lỗi, healthcheck, Docker, CI, nối FE → BE | — | [SPEC-platform.md](SPEC-platform.md) |
-| `auth` | Đăng nhập/đăng xuất, phiên, vai trò Quản lý/Giáo viên, quản lý tài khoản | platform | chưa viết |
+| `platform` | Khung NestJS, PostgreSQL + Prisma, cấu hình, định dạng lỗi, healthcheck, Docker, CI, nối FE → BE | — | [SPEC-platform.md](SPEC-platform.md) ✅ |
+| `auth` | Đăng nhập/đăng xuất, phiên, vai trò Quản lý/Giáo viên, quản lý tài khoản | platform | [SPEC-auth.md](SPEC-auth.md) |
 | `audit` | Lịch sử chỉnh sửa (ai, khi nào, trước/sau) | auth | chưa viết |
 | `roster` | Lớp (gắn tài khoản giáo viên), học sinh (xóa mềm), phạm vi xem theo lớp | auth, audit | chưa viết |
 | `evaluations` | Danh mục tiêu chí (Quản lý thêm/sửa/ẩn, seed theo mẫu GDCN), phiếu tháng với snapshot tiêu chí, mục tiêu can thiệp + đánh giá, khóa/mở khóa | roster, audit | chưa viết |
@@ -37,7 +37,7 @@ Thứ tự làm: `platform → auth → audit → roster → evaluations → rep
 | ORM | Prisma: schema và migration nằm trong repo |
 | Vai trò | `MANAGER` (toàn quyền, quản lý tài khoản, mở khóa phiếu) và `TEACHER` (chỉ thấy lớp mình phụ trách) |
 | Phân công | Một lớp có một giáo viên phụ trách; một giáo viên có thể phụ trách nhiều lớp |
-| Xác thực | Phiên lưu trong Postgres, gửi qua cookie `httpOnly`. Không tự đăng ký. Quản lý đặt lại mật khẩu. Tài khoản Quản lý đầu tiên tạo bằng lệnh seed |
+| Xác thực | Phiên lưu trong Postgres, gửi qua cookie `httpOnly`. Không tự đăng ký. Quản lý đặt lại mật khẩu (không bắt buộc đổi ở lần đăng nhập đầu). Phiên 12 giờ, hoặc 30 ngày khi tích "Ghi nhớ". Sai 5 lần thì khóa 15 phút. Tài khoản Quản lý đầu tiên tạo bằng lệnh seed |
 | Phiếu đánh giá | Mỗi tiêu chí gồm **nhiều mục tiêu can thiệp**, mỗi mục tiêu có đánh giá riêng (`+`, `+/-`, `-`, hoặc chưa đánh giá). Không giới hạn số mục tiêu |
 | Tiêu chí | **Linh động**: Quản lý thêm/sửa/sắp xếp/ẩn. Seed ban đầu theo đúng mẫu GDCN. Phiếu chép snapshot tiêu chí lúc tạo, nên sửa danh mục không làm đổi phiếu cũ |
 | Trị liệu viên trên phiếu | Giáo viên phụ trách lớp của học sinh |
