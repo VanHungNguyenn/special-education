@@ -291,14 +291,14 @@ Module này chỉ được đăng ký khi `NODE_ENV=test`. Thêm rule oxlint: `*
 **Files likely touched:** `frontend/next.config.ts` hoặc `frontend/src/app/api/[...path]/route.ts`, `frontend/.env.example`
 **Estimated scope:** S
 
-### T12: `docker-compose.dev.yml` + `docker.sh`
+### T12: `docker-compose.dev.yml` + `docker.sh` ✅
 
 **Description:**
-- Thêm `backend-dev` vào `docker-compose.dev.yml`:
+- Thêm `backend` vào `docker-compose.dev.yml`:
   - mount `./backend`, giữ `node_modules` riêng trong container;
   - lệnh chạy: `pnpm install && pnpm prisma generate && pnpm db:deploy && pnpm start:dev`;
   - publish cổng 4000, `depends_on: db (healthy)`.
-- `frontend-dev` có `BACKEND_URL=http://backend-dev:4000`.
+- `frontend` (dev) có `BACKEND_URL=http://backend:4000`.
 - Sửa `docker.sh`:
   - `up` tự tạo `.env` từ `.env.example` nếu chưa có;
   - `logs [frontend|backend|db]` (mặc định: tất cả);
@@ -306,19 +306,26 @@ Module này chỉ được đăng ký khi `NODE_ENV=test`. Thêm rule oxlint: `*
   - `down` không bao giờ xóa volume.
 
 **Acceptance criteria:**
-- [ ] `./docker.sh dev`: sửa file trong `backend/src` thì backend tự khởi động lại; FE vẫn hot reload như cũ.
-- [ ] `./docker.sh` và `./docker.sh dev` vẫn không chạy chồng lên nhau, như hành vi hiện tại.
-- [ ] `./docker.sh down` xong rồi `up` lại: dữ liệu DB vẫn còn.
+- [x] `./docker.sh dev`: sửa file trong `backend/src` thì backend tự khởi động lại; FE vẫn hot reload như cũ.
+- [x] `./docker.sh` và `./docker.sh dev` vẫn không chạy chồng lên nhau, như hành vi hiện tại.
+- [x] `./docker.sh down` xong rồi `up` lại: dữ liệu DB vẫn còn.
 
 **Verification:**
-- [ ] Chạy tay ba kịch bản trên.
+- [x] Chạy tay ba kịch bản trên.
+
+**Ghi chú khi làm:**
+- Service trong file dev đặt tên `frontend`, `backend`, `db` giống file production; tên container vẫn có hậu tố `-dev`. `./docker.sh logs backend` tự chọn đúng file compose đang chạy.
+- Không mount riêng `/app/dist`, vì `nest start` cần xóa thư mục này (lỗi `EBUSY`).
+- `docker.sh` tự tạo `.env` từ `.env.example` nếu chưa có. Nếu không, file compose production báo thiếu `POSTGRES_PASSWORD` ngay cả với lệnh `down`.
+- Cổng cấu hình được: `PORT` (FE), `BACKEND_PORT`, `DB_PORT`. Máy dev hiện tại phải dùng `BACKEND_PORT=4100`.
+- Đã kiểm tra: sửa `health.controller.ts` thì API cập nhật sau vài giây; bảng tạo trước `down` vẫn còn sau `up`; dev và production dùng hai volume riêng (`special-education-dev_pgdata`, `special-education_pgdata`).
 
 **Dependencies:** T5, T10, T11
 **Files likely touched:** `docker-compose.dev.yml`, `docker.sh`
 **Estimated scope:** S
 
 ## Checkpoint C (local chạy đủ)
-- [ ] Success Criteria 1–4 của SPEC-platform.md đạt trên máy local
+- [x] Success Criteria 1–4 của SPEC-platform.md đạt trên máy local
 
 ## Phase 4: Triển khai
 

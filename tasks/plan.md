@@ -94,10 +94,10 @@ T3 và T4 độc lập với nhau. T14 có thể viết song song từ sau T12.
 ### Phase 3: Docker
 - [x] T10: Dockerfile backend + `docker-compose.yml`
 - [x] T11: FE rewrite `/api/*` → backend
-- [ ] T12: `docker-compose.dev.yml` + `docker.sh`
+- [x] T12: `docker-compose.dev.yml` + `docker.sh`
 
 ### Checkpoint C (local chạy đủ)
-- [ ] Success Criteria 1–4 của SPEC-platform.md đạt trên máy local
+- [x] Success Criteria 1–4 của SPEC-platform.md đạt trên máy local
 
 ### Phase 4: Triển khai
 - [ ] T13: CI/CD

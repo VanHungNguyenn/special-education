@@ -1,8 +1,8 @@
 name: special-education-dev
-# Dev mode: code is mounted from ./frontend, so saving a file reloads the page (pnpm dev).
+# Dev mode: code is mounted from ./frontend and ./backend, so saving a file reloads the page or restarts the API.
 # Run: ./docker.sh dev
 services:
-  frontend-dev:
+  frontend:
     image: node:22-alpine
     container_name: special-education-frontend-dev
     working_dir: /app
@@ -18,6 +18,31 @@ services:
       - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
       # File change events don't always cross the Docker Desktop VM; polling makes reload reliable.
       - WATCHPACK_POLLING=true
+      - BACKEND_URL=http://backend:4000
+    depends_on:
+      - backend
+
+  backend:
+    image: node:22-alpine
+    container_name: special-education-backend-dev
+    working_dir: /app
+    command: sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm db:deploy && pnpm start:dev"
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-4000}:4000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+      - NODE_ENV=development
+      - PORT=4000
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/special_education
+      - DIRECT_URL=postgresql://postgres:postgres@db:5432/special_education
+      - TSC_WATCHFILE=DynamicPriorityPolling
+      - TSC_WATCHDIRECTORY=DynamicPriorityPolling
+    depends_on:
+      db:
+        condition: service_healthy
 
   db:
     image: postgres:17-alpine
