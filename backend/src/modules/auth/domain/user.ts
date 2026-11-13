@@ -27,7 +27,9 @@ export class User {
 
   static create(input: NewUser): User {
     return new User({
-      ...input,
+      id: input.id,
+      passwordHash: input.passwordHash,
+      role: input.role,
       email: normalizeEmail(input.email),
       fullName: input.fullName.trim(),
       phone: input.phone.trim(),
@@ -38,7 +40,8 @@ export class User {
   }
 
   static restore(props: UserProps): User {
-    return new User({ ...props });
+    const { id, email, passwordHash, fullName, phone, role, isActive, failedLoginCount, lockedUntil } = props;
+    return new User({ id, email, passwordHash, fullName, phone, role, isActive, failedLoginCount, lockedUntil });
   }
 
   get id() {

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import type { User as UserRecord } from '../../../generated/prisma/client.js';
 import { PrismaService } from '../../../prisma/prisma.service.js';
+import { emailTaken } from '../domain/auth-errors.js';
 import type { UserRepository } from '../domain/ports.js';
 import { User } from '../domain/user.js';
 
@@ -42,6 +43,11 @@ export class PrismaUserRepository implements UserRepository {
 
   async save(user: User) {
     const { id, ...data } = user.toProps();
-    await this.prisma.user.upsert({ where: { id }, create: { id, ...data }, update: data });
+    try {
+      await this.prisma.user.upsert({ where: { id }, create: { id, ...data }, update: data });
+    } catch (error) {
+      if ((error as { code?: string }).code === 'P2002') throw emailTaken();
+      throw error;
+    }
   }
 }

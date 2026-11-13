@@ -103,16 +103,18 @@ Definition of Done cho mọi task:
 
 **Dependencies:** B2 · **Scope:** S
 
-### B5: `RolesGuard`, danh sách và tạo tài khoản
+### B5: `RolesGuard`, danh sách và tạo tài khoản ✅
 
 **Description:** Decorator `@Roles('MANAGER')` + `RolesGuard`.
 - `GET /users`: sắp theo họ tên.
 - `POST /users`: email chuẩn hóa, trùng thì `409 EMAIL_TAKEN`.
 
 **Acceptance criteria:**
-- [ ] e2e: Giáo viên gọi `/users` nhận `403 FORBIDDEN`; chưa đăng nhập nhận 401.
-- [ ] e2e: Quản lý tạo tài khoản được (201), người mới đăng nhập được. Email trùng (khác hoa thường) nhận 409.
-- [ ] e2e: body thiếu hoặc sai trường (role lạ, email sai, thừa trường) nhận 400 kèm `details`.
+- [x] e2e: Giáo viên gọi `/users` nhận `403 FORBIDDEN`; chưa đăng nhập nhận 401.
+- [x] e2e: Quản lý tạo tài khoản được (201), người mới đăng nhập được. Email trùng (khác hoa thường) nhận 409.
+- [x] e2e: body thiếu hoặc sai trường (role lạ, email sai, thừa trường) nhận 400 kèm `details`.
+
+**Ghi chú khi làm:** e2e bắt được một lỗi thật: use case spread nguyên `input` vào `User.create`, nên mật khẩu gốc lọt vào props của entity (Prisma từ chối vì không có cột đó). Đã sửa use case; `User.create` và `User.restore` giờ chỉ nhận đúng các trường đã khai báo; có thêm unit test kiểm tra tập trường của entity. Repository đổi lỗi unique của Prisma (`P2002`) thành `EMAIL_TAKEN`, phòng trường hợp hai request tạo cùng lúc.
 
 **Dependencies:** B2 · **Scope:** M
 
