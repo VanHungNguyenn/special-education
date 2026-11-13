@@ -29,7 +29,7 @@ F1 lib/api + TanStack ─ F2 login + proxy ─ F3 menu tài khoản ─ F4 tab T
 ## Task List
 
 ### Phase 1: Backend
-- [ ] B1: Domain `User`/`Session`, mật khẩu, schema + migration
+- [x] B1: Domain `User`/`Session`, mật khẩu, schema + migration
 - [ ] B2: Đăng nhập, `me`, đăng xuất, guard toàn cục
 - [ ] B3: Khóa sau 5 lần sai, thời gian phản hồi đồng đều
 - [ ] B4: Tự đổi mật khẩu

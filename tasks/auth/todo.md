@@ -9,7 +9,7 @@ Definition of Done cho mọi task:
 
 ## Phase 1: Backend
 
-### B1: Domain `User`/`Session`, mật khẩu, schema + migration
+### B1: Domain `User`/`Session`, mật khẩu, schema + migration ✅
 
 **Description:** Thêm model `User`, `Session`, enum `Role` vào Prisma và tạo migration `auth`. Trong `src/modules/auth/domain/`:
 - `User`: kiểm tra có được đăng nhập không, ghi nhận đăng nhập sai/đúng, vô hiệu hóa/kích hoạt, đổi vai trò, đổi mật khẩu;
@@ -20,19 +20,21 @@ Definition of Done cho mọi task:
 `infrastructure/`: `ScryptPasswordHasher`, `SystemClock`.
 
 **Acceptance criteria:**
-- [ ] Unit test cho `User`:
+- [x] Unit test cho `User`:
   - lần sai thứ 5 thì khóa 15 phút; hết 15 phút thì đăng nhập được;
   - đăng nhập đúng thì bộ đếm về 0;
   - tài khoản bị vô hiệu hóa thì nhận `ACCOUNT_DISABLED`.
-- [ ] Unit test cho `Session`:
+- [x] Unit test cho `Session`:
   - không tích "Ghi nhớ": hết hạn sau 12 giờ, không gia hạn;
   - có tích: 30 ngày, chỉ gia hạn khi lần dùng trước đã cách hơn 1 giờ.
-- [ ] Unit test cho hasher:
+- [x] Unit test cho hasher:
   - hash rồi verify đúng; sai mật khẩu trả về false;
   - chuỗi hash hỏng trả về false (không ném lỗi);
   - hai lần hash cùng mật khẩu cho kết quả khác nhau;
   - có in thời gian một lần hash.
-- [ ] Migration áp dụng được vào DB dev và DB test.
+- [x] Migration áp dụng được vào DB dev và DB test.
+
+**Ghi chú khi làm:** scrypt N=2^17 mất khoảng 200ms trên máy dev, 290ms trong container Alpine (dưới ngưỡng 500ms). Quy tắc "Quản lý cuối cùng" là hàm thuần `assertManagerChangeAllowed` trong `domain/manager-rules.ts`. Các port nằm chung trong `domain/ports.ts`.
 
 **Verification:** `pnpm test`, `pnpm db:migrate`, `pnpm test:e2e`
 **Dependencies:** platform
