@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro, Lora } from "next/font/google";
 import { siteConfig } from "@/config/site";
+import { QueryProvider } from "@/lib/api/query-provider";
 import "./tailwind.css";
 import "./globals.css";
 
@@ -13,7 +14,7 @@ export const metadata: Metadata = { title: siteConfig.name, description: "Kiên 
 export const viewport: Viewport = { viewportFit: "cover" };
 
 const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => (
-  <html lang="vi" className={`${sans.variable} ${serif.variable}`} suppressHydrationWarning><body suppressHydrationWarning>{children}</body></html>
+  <html lang="vi" className={`${sans.variable} ${serif.variable}`} suppressHydrationWarning><body suppressHydrationWarning><QueryProvider>{children}</QueryProvider></body></html>
 );
 
 export default RootLayout;

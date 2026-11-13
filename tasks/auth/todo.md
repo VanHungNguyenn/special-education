@@ -167,7 +167,7 @@ Definition of Done cho mọi task:
 
 ## Phase 2: Frontend
 
-### F1: Nền tảng `lib/api` + TanStack Query
+### F1: Nền tảng `lib/api` + TanStack Query ✅
 
 **Description:** Cài `@tanstack/react-query` (bản ổn định đã phát hành ít nhất hai tuần).
 - `lib/api/api-error.ts`.
@@ -176,11 +176,13 @@ Definition of Done cho mọi task:
 - Bọc provider trong `app/layout.tsx`.
 
 **Acceptance criteria:**
-- [ ] Unit (`node:test`):
+- [x] Unit (`node:test`):
   - `request` parse đúng lỗi BE thành `ApiError` (code, message, status);
   - 204 trả về `undefined`;
   - lỗi mạng ra `NETWORK_ERROR`.
-- [ ] Trang `/` vẫn là server component và render như cũ (`pnpm build` báo `/` là static).
+- [x] Trang `/` vẫn là server component và render như cũ (`pnpm build` báo `/` là static).
+
+**Ghi chú khi làm:** `ApiError` và `request` nằm chung trong `lib/api/http-client.ts` (không tách `api-error.ts`), để `node --test` import được file mà không cần đuôi `.ts` trong import nội bộ. File không dùng parameter property hay enum, nên chạy được với cơ chế bỏ kiểu có sẵn của Node. `request` nhận `fetcher` để test. Chỉ lỗi `UNAUTHENTICATED` mới chuyển hướng về `/login`; `INVALID_CREDENTIALS` ở màn hình đăng nhập thì không. `@tanstack/react-query@5.105.0`.
 
 **Dependencies:** Checkpoint BE · **Scope:** M
 

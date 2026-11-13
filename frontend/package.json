@@ -13,6 +13,7 @@
     "test": "node --test scripts/*.test.mjs"
   },
   "dependencies": {
+    "@tanstack/react-query": "5.105.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",

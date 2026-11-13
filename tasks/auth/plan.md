@@ -42,7 +42,7 @@ F1 lib/api + TanStack ─ F2 login + proxy ─ F3 menu tài khoản ─ F4 tab T
 - [x] Success Criteria 2–6 của spec chứng minh được bằng e2e hoặc `curl`
 
 ### Phase 2: Frontend
-- [ ] F1: Nền tảng `lib/api` + TanStack Query
+- [x] F1: Nền tảng `lib/api` + TanStack Query
 - [ ] F2: Màn hình đăng nhập thật + chặn `/portal`
 - [ ] F3: Menu tài khoản, đổi mật khẩu, đăng xuất
 - [ ] F4: Tab Tài khoản cho Quản lý
