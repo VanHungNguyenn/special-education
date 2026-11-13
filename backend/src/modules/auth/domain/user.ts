@@ -71,7 +71,15 @@ export class User {
   }
 
   assertCanLogIn(now: Date): void {
+    this.assertActive();
+    this.assertNotLocked(now);
+  }
+
+  assertActive(): void {
     if (!this.props.isActive) throw accountDisabled();
+  }
+
+  assertNotLocked(now: Date): void {
     const { lockedUntil } = this.props;
     if (lockedUntil && lockedUntil > now) throw accountLocked(Math.ceil((lockedUntil.getTime() - now.getTime()) / 60_000));
   }

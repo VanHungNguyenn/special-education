@@ -1,17 +1,27 @@
 import type { INestApplication } from '@nestjs/common';
 import request from 'supertest';
+import type TestAgent from 'supertest/lib/agent.js';
+import { createUser, loginAs } from './utils/auth.js';
 import { createTestApp } from './utils/create-test-app.js';
+import { resetDb } from './utils/reset-db.js';
 
 describe('_template module (e2e)', () => {
   let app: INestApplication;
-  const api = () => request(app.getHttpServer());
+  let agent: TestAgent;
+  const api = () => agent;
 
   beforeAll(async () => {
     app = await createTestApp();
+    await resetDb(app);
+    agent = await loginAs(app, await createUser(app));
   });
 
   afterAll(async () => {
     await app.close();
+  });
+
+  it('requires a session', async () => {
+    await request(app.getHttpServer()).post('/api/v1/template/notes').send({ title: 'x' }).expect(401);
   });
 
   it('creates a note (201) and reads it back', async () => {

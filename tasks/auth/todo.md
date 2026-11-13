@@ -41,7 +41,7 @@ Definition of Done cho mọi task:
 **Files:** `prisma/schema.prisma`, `prisma/migrations/*_auth`, `src/modules/auth/domain/*`, `src/modules/auth/infrastructure/{scrypt-password-hasher,system-clock}.ts`
 **Scope:** M
 
-### B2: Đăng nhập, `me`, đăng xuất, guard toàn cục
+### B2: Đăng nhập, `me`, đăng xuất, guard toàn cục ✅
 
 **Description:**
 - Prisma repository cho user và session.
@@ -53,15 +53,22 @@ Definition of Done cho mọi task:
 - Helper e2e `test/utils/auth.ts`: `createUser(app, data)` và `loginAs(app, user)` trả về một agent có cookie. Sửa e2e của `_template` để đăng nhập trước.
 
 **Acceptance criteria:**
-- [ ] e2e: đăng nhập đúng trả về 200 và `User` (không có `passwordHash`).
+- [x] e2e: đăng nhập đúng trả về 200 và `User` (không có `passwordHash`).
   - Cookie `sid` có `HttpOnly`, `SameSite=Lax`, `Path=/`.
   - `remember=false` thì không có `Max-Age`/`Expires`; `remember=true` thì có `Max-Age` 30 ngày.
-- [ ] e2e: sai email và sai mật khẩu nhận cùng `401 INVALID_CREDENTIALS` với cùng message.
-- [ ] e2e:
+- [x] e2e: sai email và sai mật khẩu nhận cùng `401 INVALID_CREDENTIALS` với cùng message.
+- [x] e2e:
   - `GET /auth/me` không có cookie hoặc cookie rác: `401 UNAUTHENTICATED`;
   - đăng xuất xong, dùng lại cookie cũ: 401;
   - `/health` vẫn trả về 200 khi không đăng nhập.
-- [ ] Bảng `Session` chỉ chứa `tokenHash` (64 ký tự hex), không chứa token gốc.
+- [x] Bảng `Session` chỉ chứa `tokenHash` (64 ký tự hex), không chứa token gốc.
+
+**Ghi chú khi làm:**
+- Thứ tự kiểm tra trong `Login`: đang khóa thì báo khóa (trước khi kiểm tra mật khẩu, nên khóa có tác dụng kể cả khi nhập đúng); rồi kiểm tra mật khẩu; **chỉ khi mật khẩu đúng** mới báo "đã vô hiệu hóa". Người đoán mò không biết tài khoản bị vô hiệu hóa.
+- Phiên "Ghi nhớ" được gia hạn thì guard đặt lại cookie (`Max-Age` mới), để cookie không hết hạn trước phiên.
+- `COOKIE_SECURE` đọc `"false"`/`"true"` bằng `@Transform`, vì chuyển kiểu ngầm biến chuỗi `"false"` thành `true`.
+- Các module khác import qua `modules/auth/index.ts` (`Public`, `Roles`, `CurrentUser`, `CurrentSession`, `AuthModule`).
+- Không làm use case `GetCurrentUser`: guard đã nạp user, `GET /auth/me` chỉ trả về user đó.
 
 **Verification:** `pnpm test:e2e`, `pnpm lint`
 **Dependencies:** B1

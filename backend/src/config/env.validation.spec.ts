@@ -38,6 +38,14 @@ describe('validateEnv', () => {
     expect(() => validateEnv({ ...valid, PORT: 'abc' })).toThrow('PORT');
   });
 
+  it.each([
+    ['false', false],
+    ['TRUE', true],
+    ['', undefined],
+  ])('reads COOKIE_SECURE=%j as %j', (value, expected) => {
+    expect(validateEnv({ ...valid, COOKIE_SECURE: value }).COOKIE_SECURE).toBe(expected);
+  });
+
   it('lists every invalid variable at once', () => {
     expect(() => validateEnv({})).toThrow(/DATABASE_URL[\s\S]*DIRECT_URL/);
   });

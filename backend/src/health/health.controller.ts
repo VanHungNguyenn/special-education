@@ -1,9 +1,11 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import type { Response } from 'express';
+import { Public } from '../modules/auth/index.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 const DB_TIMEOUT_MS = 2000;
 
+@Public()
 @Controller('health')
 export class HealthController {
   constructor(private readonly prisma: PrismaService) {}

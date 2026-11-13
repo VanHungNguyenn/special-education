@@ -1,5 +1,5 @@
-import { plainToInstance } from 'class-transformer';
-import { IsIn, IsInt, Matches, Max, Min, validateSync } from 'class-validator';
+import { plainToInstance, Transform } from 'class-transformer';
+import { IsBoolean, IsIn, IsInt, IsOptional, Matches, Max, Min, validateSync } from 'class-validator';
 
 const POSTGRES_URL = /^postgres(ql)?:\/\/.+/;
 
@@ -17,6 +17,13 @@ export class Env {
 
   @Matches(POSTGRES_URL, { message: 'must be a postgresql:// connection string' })
   DIRECT_URL: string;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ obj }: { obj: Record<string, unknown> }) =>
+    obj.COOKIE_SECURE === undefined || obj.COOKIE_SECURE === '' ? undefined : String(obj.COOKIE_SECURE).toLowerCase() === 'true',
+  )
+  COOKIE_SECURE?: boolean;
 }
 
 export const validateEnv = (config: Record<string, unknown>): Env => {
