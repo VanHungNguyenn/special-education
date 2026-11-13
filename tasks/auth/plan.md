@@ -35,11 +35,11 @@ F1 lib/api + TanStack ─ F2 login + proxy ─ F3 menu tài khoản ─ F4 tab T
 - [x] B4: Tự đổi mật khẩu
 - [x] B5: `RolesGuard`, danh sách và tạo tài khoản
 - [x] B6: Sửa, vô hiệu hóa, đặt lại mật khẩu, quy tắc Quản lý cuối cùng
-- [ ] B7: Seed, CLI tạo Quản lý, seed demo, dọn phiên hết hạn
+- [x] B7: Seed, CLI tạo Quản lý, seed demo, dọn phiên hết hạn
 
 ### Checkpoint BE
-- [ ] `pnpm lint && pnpm test && pnpm test:e2e && pnpm build` không lỗi
-- [ ] Success Criteria 2–6 của spec chứng minh được bằng e2e hoặc `curl`
+- [x] `pnpm lint && pnpm test && pnpm test:e2e && pnpm build` không lỗi
+- [x] Success Criteria 2–6 của spec chứng minh được bằng e2e hoặc `curl`
 
 ### Phase 2: Frontend
 - [ ] F1: Nền tảng `lib/api` + TanStack Query

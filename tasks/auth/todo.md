@@ -136,7 +136,7 @@ Definition of Done cho mọi task:
 
 **Dependencies:** B5 · **Scope:** M
 
-### B7: Seed, CLI tạo Quản lý, seed demo, dọn phiên hết hạn
+### B7: Seed, CLI tạo Quản lý, seed demo, dọn phiên hết hạn ✅
 
 **Description:**
 - `src/cli/create-manager.ts`:
@@ -148,16 +148,22 @@ Definition of Done cho mọi task:
 - Lúc app khởi động: xóa các phiên đã hết hạn.
 
 **Acceptance criteria:**
-- [ ] Chạy `pnpm db:seed` hai lần: chỉ có một Quản lý.
-- [ ] Trong container production: `docker compose exec -e SEED_MANAGER_EMAIL=… backend node dist/cli/create-manager.js` tạo được tài khoản và đăng nhập được.
-- [ ] `pnpm db:seed:demo` rồi `pnpm db:seed:demo --clean`: không còn user `@demo.local`.
-- [ ] Thiếu biến `SEED_MANAGER_*` thì báo rõ thiếu biến nào.
+- [x] Chạy `pnpm db:seed` hai lần: chỉ có một Quản lý.
+- [x] Trong container production: `docker compose exec -e SEED_MANAGER_EMAIL=… backend node dist/cli/create-manager.js` tạo được tài khoản và đăng nhập được.
+- [x] `pnpm db:seed:demo` rồi `pnpm db:seed:demo --clean`: không còn user `@demo.local`.
+- [x] Thiếu biến `SEED_MANAGER_*` thì báo rõ thiếu biến nào.
+
+**Ghi chú khi làm:**
+- **Bỏ `tsx` và `prisma/seed*.ts`.** esbuild (mà `tsx` dùng) không sinh decorator metadata, nên DI của Nest và việc chuyển `PORT` thành số đều hỏng khi chạy seed. Seed giờ nằm ở `src/cli/create-manager.ts` và `src/cli/seed-demo.ts`, chạy bằng bản build: `pnpm db:seed` = `pnpm build && node dist/cli/create-manager.js`. Production dùng đúng các file này.
+- `seed-demo` từ chối chạy khi `NODE_ENV=production`; `--clean` chạy bằng `node dist/cli/seed-demo.js --clean`.
+- Đã kiểm tra trong image production với DB tạm: tạo Quản lý, chạy lại nhận "đã có", và dữ liệu demo bị chặn.
+- Việc dọn phiên hết hạn lúc khởi động chạy nền và bắt lỗi, nên app vẫn khởi động được khi DB chết.
 
 **Dependencies:** B5 · **Scope:** M
 
 ## Checkpoint BE
-- [ ] `pnpm lint && pnpm test && pnpm test:e2e && pnpm build` không lỗi
-- [ ] Success Criteria 2–6 chứng minh được
+- [x] `pnpm lint && pnpm test && pnpm test:e2e && pnpm build` không lỗi
+- [x] Success Criteria 2–6 chứng minh được (e2e: khóa, 403 cho giáo viên, tạo rồi vô hiệu hóa, Quản lý cuối cùng, chỉ lưu hash)
 
 ## Phase 2: Frontend
 

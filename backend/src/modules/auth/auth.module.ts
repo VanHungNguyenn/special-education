@@ -3,6 +3,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthenticateSessionUseCase } from './application/authenticate-session.use-case.js';
 import { ChangeOwnPasswordUseCase } from './application/change-own-password.use-case.js';
 import { CreateUserUseCase } from './application/create-user.use-case.js';
+import { ExpiredSessionsCleanup } from './application/expired-sessions-cleanup.js';
 import { ListUsersUseCase } from './application/list-users.use-case.js';
 import { ResetUserPasswordUseCase } from './application/reset-user-password.use-case.js';
 import { UpdateUserUseCase } from './application/update-user.use-case.js';
@@ -35,6 +36,7 @@ import { SystemClock } from './infrastructure/system-clock.js';
     UpdateUserUseCase,
     ResetUserPasswordUseCase,
     SessionCookie,
+    ExpiredSessionsCleanup,
     { provide: APP_GUARD, useClass: SessionGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
   ],
