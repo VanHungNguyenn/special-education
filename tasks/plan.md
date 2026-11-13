@@ -80,7 +80,7 @@ T3 và T4 độc lập với nhau. T14 có thể viết song song từ sau T12.
 - [x] `curl localhost:4000/api/v1/khong-ton-tai` trả về 404 đúng định dạng lỗi
 
 ### Phase 2: Database và khung module
-- [ ] T5: Postgres trong Docker dev + Prisma
+- [x] T5: Postgres trong Docker dev + Prisma
 - [ ] T6: Khung e2e (DB test, tạo app, reset)
 - [ ] T7: Healthcheck có kiểm tra DB
 - [ ] T8: Module mẫu `_template` (4 lớp)

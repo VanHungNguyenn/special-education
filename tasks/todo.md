@@ -102,7 +102,7 @@ Xóa controller/service mẫu do CLI sinh ra. Không tạo thư mục rỗng (gi
 
 ## Phase 2: Database và khung module
 
-### T5: Postgres trong Docker dev + Prisma
+### T5: Postgres trong Docker dev + Prisma ✅
 
 **Description:**
 - Thêm service `db` vào `docker-compose.dev.yml`:
@@ -120,13 +120,20 @@ Xóa controller/service mẫu do CLI sinh ra. Không tạo thư mục rỗng (gi
 - Thêm rule oxlint `no-restricted-imports`: chỉ `src/prisma/**` và `**/infrastructure/**` được import `@prisma/*`.
 
 **Acceptance criteria:**
-- [ ] Chạy `docker compose -f docker-compose.dev.yml up -d db` thì có hai DB `special_education` và `special_education_test`.
-- [ ] `pnpm db:deploy` chạy thành công, migration `init` đã commit.
-- [ ] Khi container `db` đang dừng, `pnpm start:dev` vẫn khởi động được.
+- [x] Chạy `docker compose -f docker-compose.dev.yml up -d db` thì có hai DB `special_education` và `special_education_test`.
+- [x] `pnpm db:deploy` chạy thành công, migration `init` đã commit.
+- [x] Khi container `db` đang dừng, `pnpm start:dev` vẫn khởi động được.
 
 **Verification:**
-- [ ] `pnpm db:deploy && pnpm lint && pnpm build`
-- [ ] Dừng `db`, chạy `pnpm start:dev`: app lên bình thường.
+- [x] `pnpm db:deploy && pnpm lint && pnpm build`
+- [x] Dừng `db`, chạy `pnpm start:dev`: app lên bình thường.
+
+**Ghi chú khi làm:**
+- Client Prisma sinh vào `src/generated/prisma` (đã gitignore). `postinstall` và `build` tự chạy `prisma generate`; lệnh này chạy được cả khi không có biến DB, nên build Docker không bị chặn.
+- `prisma.config.ts` nạp `.env` bằng `process.loadEnvFile()` có sẵn của Node, không cần thêm `dotenv`.
+- Thêm `tsx` (devDependency) để chạy seed viết bằng TypeScript. `esbuild: false` trong `allowBuilds`, vì tsx không cần script cài đặt của esbuild.
+- Postgres dev chỉ mở trên `127.0.0.1`; đổi cổng bằng `DB_PORT`.
+- Có unit test chứng minh app khởi động được khi DB không kết nối được, và chỉ lỗi khi thật sự chạy truy vấn.
 
 **Dependencies:** T3
 **Files likely touched:** `docker-compose.dev.yml`, `backend/docker/init-test-db.sql`, `backend/prisma/schema.prisma` (+ `prisma.config.ts` nếu cần), `backend/src/prisma/prisma.service.ts`, `backend/src/prisma/prisma.module.ts`

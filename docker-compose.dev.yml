@@ -18,3 +18,24 @@ services:
       - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
       # File change events don't always cross the Docker Desktop VM; polling makes reload reliable.
       - WATCHPACK_POLLING=true
+
+  db:
+    image: postgres:17-alpine
+    container_name: special-education-db-dev
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=special_education
+    ports:
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/docker/init-test-db.sql:/docker-entrypoint-initdb.d/init-test-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d special_education"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
