@@ -18,6 +18,7 @@
 | [ui-guidelines.md](ui-guidelines.md) | Quy ước giao diện: nút, xuống dòng tiếng Việt, card, section, màu, font |
 | [testing.md](testing.md) | Chụp ảnh kiểm tra giao diện bằng Playwright (`pnpm screenshot`) |
 | [RUNNING.md](../../RUNNING.md) | Hướng dẫn chạy nhanh (local và Docker) |
+| [backend-requirements.md](../../docs/backend-requirements.md) | Frontend cần backend cung cấp những gì |
 
 ## Chạy nhanh
 

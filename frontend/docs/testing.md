@@ -1,6 +1,6 @@
 # Kiểm tra giao diện (Playwright)
 
-Dự án chưa có test tự động. Sau mỗi lần sửa giao diện, chụp ảnh màn hình bằng Playwright để xem lại kết quả theo [ui-guidelines.md](ui-guidelines.md).
+Unit test mới chỉ có cho helper trong `src/lib` (`pnpm test`). Sau mỗi lần sửa giao diện, chụp ảnh màn hình bằng Playwright để xem lại kết quả theo [ui-guidelines.md](ui-guidelines.md).
 
 ## Chạy
 

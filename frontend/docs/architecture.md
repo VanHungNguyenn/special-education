@@ -40,7 +40,7 @@ frontend/
 │   ├── lib/utils.ts            # cn() = clsx + tailwind-merge
 │   └── config/site.ts          # Thông tin trung tâm (đọc từ env)
 ├── docs/                       # Tài liệu này
-├── scripts/screenshot.mjs      # Chụp ảnh giao diện bằng Playwright
+├── scripts/                    # screenshot, layout-check, a11y-check (Playwright) và unit test
 ├── components.json             # Cấu hình shadcn/ui
 ├── .env.example                # Mẫu biến môi trường
 └── Dockerfile
