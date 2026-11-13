@@ -139,7 +139,7 @@ Xóa controller/service mẫu do CLI sinh ra. Không tạo thư mục rỗng (gi
 **Files likely touched:** `docker-compose.dev.yml`, `backend/docker/init-test-db.sql`, `backend/prisma/schema.prisma` (+ `prisma.config.ts` nếu cần), `backend/src/prisma/prisma.service.ts`, `backend/src/prisma/prisma.module.ts`
 **Estimated scope:** M
 
-### T6: Khung e2e (DB test, tạo app, reset)
+### T6: Khung e2e (DB test, tạo app, reset) ✅
 
 **Description:**
 - `vitest.config.e2e.ts` có `globalSetup`: nạp `.env.test`, kiểm tra tên DB kết thúc bằng `_test`, chạy `prisma migrate deploy` vào DB test.
@@ -148,13 +148,15 @@ Xóa controller/service mẫu do CLI sinh ra. Không tạo thư mục rỗng (gi
 - Viết e2e đầu tiên: route lạ trả về 404 đúng định dạng.
 
 **Acceptance criteria:**
-- [ ] `pnpm test:e2e` chạy được với DB test.
-- [ ] Trỏ `.env.test` sang DB không có hậu tố `_test` thì e2e dừng ngay, kèm thông báo rõ.
-- [ ] `main.ts` và test app dùng chung `configureApp`.
-- [ ] Bỏ `passWithNoTests` trong `vitest.config.e2e.ts`.
+- [x] `pnpm test:e2e` chạy được với DB test.
+- [x] Trỏ `.env.test` sang DB không có hậu tố `_test` thì e2e dừng ngay, kèm thông báo rõ.
+- [x] `main.ts` và test app dùng chung `configureApp`.
+- [x] Bỏ `passWithNoTests` trong `vitest.config.e2e.ts`.
 
 **Verification:**
-- [ ] `pnpm test:e2e`
+- [x] `pnpm test:e2e`
+
+**Ghi chú khi làm:** Nếu không có `.env.test`, e2e dùng `.env.test.example` (trỏ vào container DB dev), nên không cần bước cài đặt nào. Biến môi trường đã đặt sẵn (ví dụ trong CI) được ưu tiên hơn file. Guard kiểm tra cả `DATABASE_URL` lẫn `DIRECT_URL`. Các file e2e chạy tuần tự (`fileParallelism: false`), vì dùng chung một DB. Thêm `test/reset-db.e2e-spec.ts` để chứng minh `resetDb` hoạt động.
 
 **Dependencies:** T4, T5
 **Files likely touched:** `backend/vitest.config.e2e.ts`, `backend/test/global-setup.ts`, `backend/test/utils/create-test-app.ts`, `backend/test/utils/reset-db.ts`, `backend/src/app.setup.ts`

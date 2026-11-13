@@ -6,8 +6,9 @@ export default defineConfig({
   test: {
     globals: true,
     root: './',
-    setupFiles: ['reflect-metadata'],
-    include: ['**/*.e2e-spec.ts'],
-    passWithNoTests: true,
+    globalSetup: ['./test/global-setup.ts'],
+    setupFiles: ['./test/setup-env.ts'],
+    include: ['test/**/*.e2e-spec.ts'],
+    fileParallelism: false,
   },
 });
