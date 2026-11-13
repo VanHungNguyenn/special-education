@@ -8,6 +8,8 @@ export function cn(...inputs: ClassValue[]) {
 // Vietnamese given name is the last word: "Nguyễn Minh Anh" → "A".
 export const nameInitial = (name: string) => name.trim().split(/\s+/).at(-1)?.charAt(0).toUpperCase() ?? "";
 
+export const nameInitials = (name: string) => name.trim().split(/\s+/).filter(Boolean).slice(-2).map((word) => word.charAt(0)).join("").toUpperCase();
+
 // "Lớp Mầm Xanh" → "M"; names without the "Lớp" prefix use their first letter.
 export const classInitial = (name: string) => name.trim().replace(/^lớp\s+/i, "").charAt(0).toUpperCase();
 

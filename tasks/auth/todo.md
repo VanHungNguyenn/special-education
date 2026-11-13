@@ -206,7 +206,7 @@ Definition of Done cho mọi task:
 
 **Dependencies:** F1 · **Scope:** M
 
-### F3: Menu tài khoản, đổi mật khẩu, đăng xuất
+### F3: Menu tài khoản, đổi mật khẩu, đăng xuất ✅
 
 **Description:** `AccountMenu` dùng `useMe()`:
 - tên, email, điện thoại, vai trò thật; avatar dùng `nameInitial`;
@@ -214,9 +214,15 @@ Definition of Done cho mọi task:
 - "Đăng xuất" gọi API, xóa cache, về `/login`.
 
 **Acceptance criteria:**
-- [ ] Menu hiện đúng thông tin người đăng nhập (đổi tài khoản thì đổi theo).
-- [ ] Đổi mật khẩu: nhập lại không khớp thì báo ngay ở FE; sai mật khẩu hiện tại thì hiện lỗi của BE; thành công thì thông báo và đóng dialog.
-- [ ] Đăng xuất xong, bấm "Back" về `/portal` thì bị chuyển lại `/login`.
+- [x] Menu hiện đúng thông tin người đăng nhập (đổi tài khoản thì đổi theo).
+- [x] Đổi mật khẩu: nhập lại không khớp thì báo ngay ở FE; sai mật khẩu hiện tại thì hiện lỗi của BE; thành công thì thông báo và đóng dialog.
+- [x] Đăng xuất xong, bấm "Back" về `/portal` thì bị chuyển lại `/login`.
+
+**Ghi chú khi làm:**
+- Thêm `nameInitials` (2 chữ cái, có test) và `components/common/form-error.tsx` (`role="alert"`) dùng chung cho các dialog.
+- Nút đóng khi đổi mật khẩu thành công đặt tên "Xong", để không trùng tên "Đóng" với nút X của shadcn.
+- Đã thử trên Playwright (1440 và 375px): tên và vai trò thật, ba trường hợp lỗi/thành công khi đổi mật khẩu, đăng nhập lại bằng mật khẩu mới. Sau khi đăng xuất, `/auth/me` trả về 401 và "Back" không về được portal (đăng nhập/đăng xuất dùng `router.replace`).
+- **Sự cố gặp khi thử:** sau các lần cố ý nhập sai ở F2, tài khoản `quanly@demo.local` bị khóa thật. Đã mở khóa bằng API đặt lại mật khẩu, đúng như quy trình thiết kế.
 
 **Dependencies:** F2 · **Scope:** M
 
