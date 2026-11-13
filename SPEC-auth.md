@@ -1,6 +1,6 @@
 # Spec: Module `auth`
 
-Trạng thái: **chờ duyệt**. Thuộc [SPEC-backend.md](SPEC-backend.md), phụ thuộc module `platform` (đã xong). Kiến trúc: [docs/architecture.md](docs/architecture.md).
+Trạng thái: **đã duyệt** (2026-11-13). Plan: [tasks/auth/plan.md](tasks/auth/plan.md). Thuộc [SPEC-backend.md](SPEC-backend.md), phụ thuộc module `platform` (đã xong). Kiến trúc: [docs/architecture.md](docs/architecture.md).
 
 ## Objective
 
@@ -221,5 +221,6 @@ export class User {
 
 ## Open Questions
 
-1. **Server production đã có HTTPS chưa?** (Ví dụ nginx hoặc Caddy đứng trước cổng 3000.) Nếu chưa, cookie `secure` sẽ không được trình duyệt lưu và không đăng nhập được. Khi đó phải đặt `COOKIE_SECURE=false` cho tới khi có HTTPS, và chấp nhận mật khẩu đi qua mạng không mã hóa. Tôi khuyến nghị cài HTTPS trước khi dùng thật với dữ liệu học sinh.
-2. **Email Quản lý đầu tiên trên server** là gì? Bạn sẽ tự chạy lệnh ở US5.2, nên chỉ cần biết để ghi vào hướng dẫn.
+Đã chốt:
+1. Server production **đã có HTTPS**, nên cookie `secure` bật mặc định khi `NODE_ENV=production`. `COOKIE_SECURE=false` chỉ dùng khi cần thử bản production qua HTTP ở một host khác `localhost` (trình duyệt coi `http://localhost` là an toàn, nên `./docker.sh` chạy ở local vẫn đăng nhập được).
+2. Email Quản lý đầu tiên trên server: `vanhungnguyenbku@gmail.com`. Chủ dự án tự chạy lệnh ở US5.2 với mật khẩu riêng. Hướng dẫn deploy dùng placeholder, không ghi email này.

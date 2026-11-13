@@ -1,6 +1,6 @@
 # CLAUDE.md (backend)
 
-NestJS 12 API for the special-education portal. Architecture and patterns: [../docs/architecture.md](../docs/architecture.md). Module map and shared rules: [../SPEC-backend.md](../SPEC-backend.md). Current module plan: [../tasks/plan.md](../tasks/plan.md).
+NestJS 12 API for the special-education portal. Architecture and patterns: [../docs/architecture.md](../docs/architecture.md). Module map and shared rules: [../SPEC-backend.md](../SPEC-backend.md). Current module plan: [../tasks/auth/plan.md](../tasks/auth/plan.md).
 
 ## Commands
 
