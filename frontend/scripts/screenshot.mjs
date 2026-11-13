@@ -3,6 +3,7 @@
 import { mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
+import { logIn } from "./login.mjs";
 
 const args = process.argv.slice(2);
 const option = (name) => args.find((arg) => arg.startsWith(`--${name}=`))?.split("=")[1];
@@ -17,6 +18,7 @@ let problems = 0;
 
 for (const width of widths) {
   const context = await browser.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: 1 });
+  if (pages.some((path) => path.startsWith("/portal"))) await logIn(context, baseUrl);
   for (const path of pages) {
     const page = await context.newPage();
     const errors = [];

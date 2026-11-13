@@ -1,6 +1,7 @@
 // Accessibility / touch-target / responsive check of every page at phone, tablet and desktop widths (headless).
 // Usage: pnpm dev (in another terminal), then `pnpm a11y-check [baseUrl]`. Exits 1 when something fails.
 import { chromium } from "playwright";
+import { logIn } from "./login.mjs";
 
 const BASE = process.argv[2] || "http://localhost:3000";
 const viewports = [
@@ -10,7 +11,7 @@ const viewports = [
   { name: "laptop 1024 (mouse)", width: 1024, height: 768, touch: false },
   { name: "desktop 1440", width: 1440, height: 900, touch: false },
 ];
-const pages = ["/", "/login", "/portal?tab=classes", "/portal?tab=students", "/portal?tab=reports", "/portal?student=1"];
+const pages = ["/", "/login", "/portal?tab=classes", "/portal?tab=students", "/portal?tab=reports", "/portal?tab=accounts", "/portal?student=1"];
 
 // Runs in the page: targets, text size, contrast, overflow, clipping.
 const audit = (touch) => {
@@ -74,6 +75,7 @@ const report = (label, list) => { if (list.length) { problems += list.length; co
 
 for (const vp of viewports) {
   const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, hasTouch: vp.touch, isMobile: vp.touch && vp.width < 1024 });
+  await logIn(ctx, BASE);
   const page = await ctx.newPage();
   console.log(`\n=== ${vp.name}`);
   for (const path of pages) {
@@ -92,6 +94,7 @@ for (const vp of viewports) {
 // Behaviour checks (phone, touch)
 console.log("\n=== behaviour");
 const ctx = await browser.newContext({ viewport: { width: 375, height: 812 }, hasTouch: true, isMobile: true });
+await logIn(ctx, BASE);
 const page = await ctx.newPage();
 const check = (ok, msg) => { if (!ok) problems++; console.log(`  ${ok ? "✓" : "✗"} ${msg}`); };
 

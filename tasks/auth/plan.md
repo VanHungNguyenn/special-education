@@ -46,7 +46,7 @@ F1 lib/api + TanStack ─ F2 login + proxy ─ F3 menu tài khoản ─ F4 tab T
 - [x] F2: Màn hình đăng nhập thật + chặn `/portal`
 - [x] F3: Menu tài khoản, đổi mật khẩu, đăng xuất
 - [x] F4: Tab Tài khoản cho Quản lý
-- [ ] F5: Công cụ kiểm tra tự đăng nhập; thử đăng nhập trên trình duyệt thật
+- [x] F5: Công cụ kiểm tra tự đăng nhập; thử đăng nhập trên trình duyệt thật
 - [ ] F6: Tài liệu
 
 ### Checkpoint hoàn thành

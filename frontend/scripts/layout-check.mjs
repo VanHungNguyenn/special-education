@@ -2,6 +2,7 @@
 // side-by-side blocks that overlap or sit closer than MIN_GAP, and decorations covering text.
 // Usage: pnpm dev (in another terminal), then `pnpm layout-check [baseUrl]`
 import { chromium } from "playwright";
+import { logIn } from "./login.mjs";
 
 const base = process.argv[2] || "http://localhost:3000";
 const MIN_GAP = 24;
@@ -62,11 +63,12 @@ for (const [path, pairs] of Object.entries(checks)) {
 const clickable = 'a[href], button:not(:disabled), [role="button"], [role="menuitem"], [role="option"], [role="combobox"], [role="checkbox"], select:not(:disabled), label[for]';
 const cursorPages = [
   ["/", null], ["/login", null], ["/portal", null],
-  ["/portal", (page) => page.getByRole("button", { name: /Nguyễn Hà Linh/ }).click()],
+  ["/portal", (page) => page.locator("aside [data-slot=dropdown-menu-trigger]").click()],
   ["/portal?tab=students", (page) => page.locator("main button[role=combobox]").first().click()],
 ];
 for (const [path, open] of cursorPages) {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  if (path.startsWith("/portal")) await logIn(page.context(), base);
   await page.goto(new URL(path, base).href, { waitUntil: "networkidle" });
   if (open) { await open(page); await page.waitForTimeout(300); }
   const wrong = await page.evaluate((selector) => [...document.querySelectorAll(selector)]

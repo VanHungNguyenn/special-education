@@ -11,7 +11,7 @@ export const QueryProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [client] = useState(() => {
     const onError = (error: unknown) => {
-      if (!(error instanceof ApiError) || error.code !== "UNAUTHENTICATED") return;
+      if (!(error instanceof ApiError) || error.code !== "UNAUTHENTICATED" || window.location.pathname === "/login") return;
       queryClient.clear();
       router.replace(`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
     };

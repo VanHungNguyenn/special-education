@@ -254,7 +254,7 @@ Definition of Done cho mọi task:
 
 **Dependencies:** F3 · **Scope:** L (danh sách cùng ba dialog; tách nhỏ hơn thì không thử được trọn luồng)
 
-### F5: Công cụ kiểm tra tự đăng nhập; thử trên trình duyệt thật
+### F5: Công cụ kiểm tra tự đăng nhập; thử trên trình duyệt thật ✅
 
 **Description:**
 - Helper đăng nhập dùng chung cho `a11y-check`, `layout-check`, `screenshot`: gọi API login trong context Playwright với `CHECK_EMAIL`/`CHECK_PASSWORD`, mặc định là tài khoản demo.
@@ -262,9 +262,15 @@ Definition of Done cho mọi task:
 - Script `scripts/auth-flow.mjs` chạy luồng: chưa đăng nhập bị chuyển về login, đăng nhập, tải lại vẫn còn phiên, đăng xuất.
 
 **Acceptance criteria:**
-- [ ] Với `./docker.sh dev` và dữ liệu demo: `a11y-check`, `layout-check`, `auth-flow` đều không lỗi.
-- [ ] `auth-flow` cũng chạy được với `./docker.sh` (production ở local, cookie `Secure` qua `http://localhost`).
-- [ ] BE không chạy thì script báo lỗi rõ ràng, không treo.
+- [x] Với `./docker.sh dev` và dữ liệu demo: `a11y-check`, `layout-check`, `auth-flow` đều không lỗi.
+- [x] `auth-flow` cũng chạy được với `./docker.sh` (production ở local, cookie `Secure` qua `http://localhost`).
+- [x] BE không chạy thì script báo lỗi rõ ràng, không treo.
+
+**Ghi chú khi làm:**
+- `scripts/login.mjs` đăng nhập qua `context.request`, nên cookie dùng chung với các trang trong cùng context. `layout-check` chỉ đăng nhập cho đường dẫn `/portal`. Menu tài khoản trong `layout-check` giờ chọn bằng `[data-slot=dropdown-menu-trigger]` thay vì tên cố định.
+- **`auth-flow` phát hiện một lỗi:** đăng xuất xong URL thành `/login?next=%2Flogin`, vì `queryClient.clear()` khiến `useMe` gọi lại `/auth/me`, nhận 401 rồi chuyển hướng thêm lần nữa. Đã sửa: đăng xuất dùng `window.location.replace("/login")`, nạp lại trang và xóa sạch state. Bộ xử lý 401 cũng bỏ qua khi đang ở `/login`.
+- **`a11y-check` phát hiện:** tên và email trong tab Tài khoản bị cắt bằng "…". Đã đổi sang xuống dòng (`wrap-break-word`, `wrap-anywhere`).
+- Kết quả: `a11y-check` không lỗi, `layout-check` 0 lỗi, `auth-flow` đạt cả với `./docker.sh dev` lẫn `./docker.sh`. Ở bản production local, cookie có `Secure` qua `http://localhost` vẫn được nhận; tài khoản kiểm tra tạo bằng `create-manager` trong container.
 
 **Dependencies:** F4 · **Scope:** M
 
