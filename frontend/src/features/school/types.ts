@@ -1,4 +1,4 @@
-export type TabId = "classes" | "students" | "reports";
+export type TabId = "classes" | "students" | "reports" | "accounts";
 export type ModalId = "class" | "student" | null;
 
 export type SchoolClass = {

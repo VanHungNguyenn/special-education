@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AccountList } from "@/components/school/account-list";
 import { AppShell, PageHeader } from "@/components/school/app-shell";
 import { ClassOverview } from "@/components/school/class-overview";
 import { ConfirmDialog } from "@/components/school/confirm-dialog";
@@ -10,14 +11,18 @@ import { StudentList } from "@/components/school/student-list";
 import { StudentProfile } from "@/components/school/student-profile";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { useMe } from "@/features/auth/queries";
 import { useSchoolManagement } from "@/features/school/use-school-management";
 import type { ModalId, SchoolClass, Student, TabId } from "@/features/school/types";
 
-const titles: Record<TabId, string> = { classes: "Lớp học", students: "Học sinh", reports: "Báo cáo" };
+const titles: Record<TabId, string> = { classes: "Lớp học", students: "Học sinh", reports: "Báo cáo", accounts: "Tài khoản" };
 type PendingDelete = { kind: "class"; item: SchoolClass } | { kind: "student"; item: Student };
 
 const PortalPage = () => {
   const school = useSchoolManagement();
+  const { data: me } = useMe();
+  const isManager = me?.role === "MANAGER";
+  const [creatingAccount, setCreatingAccount] = useState(false);
   const [tab, setTab] = useState<TabId>("classes");
   const [modal, setModal] = useState<ModalId>(null);
   const [selectedStudentId, setSelectedStudentId] = useState<number | null>(null);
@@ -34,6 +39,8 @@ const PortalPage = () => {
     if (requestedTab && requestedTab in titles) setTab(requestedTab);
     if (requestedStudent) { setTab("students"); setSelectedStudentId(requestedStudent); }
   }, []);
+
+  useEffect(() => { if (me && !isManager && tab === "accounts") setTab("classes"); }, [me, isManager, tab]);
 
   const changeTab = (nextTab: TabId) => { setTab(nextTab); setSelectedStudentId(null); };
   const openClassModal = (item: SchoolClass | null = null) => { setEditingClass(item); setModal("class"); };
@@ -55,13 +62,14 @@ const PortalPage = () => {
     setPendingDelete(null);
   };
 
-  const action = tab !== "reports" ? <Button size="lg" aria-label={`Thêm ${tab === "classes" ? "lớp" : "học sinh"}`} onClick={() => tab === "classes" ? openClassModal() : openStudentModal()}><Plus/><span className="hidden sm:inline">Thêm {tab === "classes" ? "lớp" : "học sinh"}</span></Button> : undefined;
+  const action = tab === "accounts" ? <Button size="lg" aria-label="Thêm tài khoản" onClick={() => setCreatingAccount(true)}><Plus/><span className="hidden sm:inline">Thêm tài khoản</span></Button> : tab !== "reports" ? <Button size="lg" aria-label={`Thêm ${tab === "classes" ? "lớp" : "học sinh"}`} onClick={() => tab === "classes" ? openClassModal() : openStudentModal()}><Plus/><span className="hidden sm:inline">Thêm {tab === "classes" ? "lớp" : "học sinh"}</span></Button> : undefined;
 
-  return <AppShell tab={tab} onTabChange={changeTab}>
+  return <AppShell tab={tab} onTabChange={changeTab} showAccounts={isManager}>
     <PageHeader title={titles[tab]} action={action}/>
     {tab === "classes" && <ClassOverview classes={school.classes} students={school.students} statuses={school.evaluationStatuses} month={school.month} onEdit={openClassModal} onDelete={requestDeleteClass} onOpen={openClass}/>} 
     {tab === "students" && !selectedStudent && <StudentList classes={school.classes} students={school.filteredStudents} query={school.query} classFilter={school.classFilter} onQueryChange={school.setQuery} onFilterChange={school.setClassFilter} onOpen={setSelectedStudentId} onEdit={openStudentModal} onDelete={requestDeleteStudent}/>} 
     {tab === "students" && selectedStudent && <StudentProfile student={selectedStudent} classes={school.classes} month={school.month} status={school.evaluationStatuses[`${selectedStudent.id}-${school.month}`] || "draft"} evaluations={school.evaluations} onMonthChange={school.setMonth} onRatingChange={(index, patch) => school.updateRating(selectedStudent.id, index, patch)} onSave={() => school.updateEvaluationStatus(selectedStudent.id, "updated")} onLock={() => school.updateEvaluationStatus(selectedStudent.id, "locked")} onBack={() => setSelectedStudentId(null)} onEdit={() => openStudentModal(selectedStudent)}/>} 
+    {tab === "accounts" && isManager && me && <AccountList currentUserId={me.id} createOpen={creatingAccount} onCreateOpenChange={setCreatingAccount}/>}
     {tab === "reports" && <ReportView classes={school.classes} students={school.students} evaluations={school.evaluations} statuses={school.evaluationStatuses} classFilter={school.classFilter} month={school.month} onClassChange={school.setClassFilter} onMonthChange={school.setMonth}/>} 
     {modal && <EntityModal type={modal} classes={school.classes} editingClass={editingClass} editingStudent={editingStudent} onClose={closeModal} onSaveClass={school.saveClass} onSaveStudent={school.saveStudent}/>} 
     <ConfirmDialog open={Boolean(pendingDelete)} title={pendingDelete?.kind === "class" ? "Xóa lớp học?" : "Xóa hồ sơ học sinh?"} description={pendingDelete ? `Dữ liệu của “${pendingDelete.item.name}” sẽ bị xóa. Thao tác này không thể hoàn tác.` : ""} onConfirm={confirmDelete} onOpenChange={(open) => { if (!open) setPendingDelete(null); }}/>

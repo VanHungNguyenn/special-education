@@ -226,7 +226,7 @@ Definition of Done cho mọi task:
 
 **Dependencies:** F2 · **Scope:** M
 
-### F4: Tab Tài khoản cho Quản lý
+### F4: Tab Tài khoản cho Quản lý ✅
 
 **Description:**
 - Thêm `accounts` vào `TabId`; mục điều hướng chỉ hiện khi `me.role === "MANAGER"`. `?tab=accounts` với giáo viên thì về tab mặc định.
@@ -238,9 +238,19 @@ Definition of Done cho mọi task:
   - nút vô hiệu hóa/kích hoạt có `ConfirmDialog`.
 
 **Acceptance criteria:**
-- [ ] Giáo viên không thấy tab. Quản lý tạo, sửa, vô hiệu hóa, đặt lại mật khẩu được; danh sách tự cập nhật (invalidate `userKeys.lists()`).
-- [ ] Lỗi BE (`EMAIL_TAKEN`, `LAST_MANAGER`…) hiện ngay trong dialog.
-- [ ] Hiển thị đúng ở 375, 768 và 1440px; mọi nút đạt kích thước chạm theo quy ước.
+- [x] Giáo viên không thấy tab. Quản lý tạo, sửa, vô hiệu hóa, đặt lại mật khẩu được; danh sách tự cập nhật (invalidate `userKeys.lists()`).
+- [x] Lỗi BE (`EMAIL_TAKEN`, `LAST_MANAGER`…) hiện ngay trong dialog.
+- [x] Hiển thị đúng ở 375, 768 và 1440px; mọi nút đạt kích thước chạm theo quy ước.
+
+**Ghi chú khi làm:**
+- Hàm thuần `generatePassword` / `accountStatus` (`features/users/account.ts`) và `errorText` (`lib/api/http-client.ts`) đều có unit test. Lỗi `VALIDATION_FAILED` hiện chi tiết từng trường.
+- Quản lý tự sửa chính mình thì không có ô vai trò, không có nút vô hiệu hóa, và chỉ gửi họ tên/email/điện thoại.
+- **Sửa thanh điều hướng mobile:** với 4 mục, nhãn bị cắt ("Tài k…"). Giờ dưới `lg` icon nằm trên chữ. Đã kiểm tra: ở 375 và 768px không nhãn nào bị cắt, không tràn ngang.
+- Dialog sửa giữ nguyên tiêu đề trong lúc đóng (cờ mở/đóng tách khỏi state user đang sửa).
+- Đã thử trên Playwright:
+  - giáo viên không thấy tab, `?tab=accounts` bị đưa về Lớp học;
+  - Quản lý tạo tài khoản (báo trùng email, mật khẩu ngẫu nhiên 12 ký tự), sửa, vô hiệu hóa, kích hoạt lại, đặt lại mật khẩu;
+  - không có lỗi JS.
 
 **Dependencies:** F3 · **Scope:** L (danh sách cùng ba dialog; tách nhỏ hơn thì không thử được trọn luồng)
 

@@ -40,3 +40,10 @@ test("request maps network failures to NETWORK_ERROR", async () => {
   const fetcher = async () => { throw new TypeError("fetch failed"); };
   await assert.rejects(request("/auth/me", { fetcher }), { status: 0, code: "NETWORK_ERROR" });
 });
+
+test("errorText shows field details when present, otherwise the message", async () => {
+  const { errorText } = await import("../src/lib/api/http-client.ts");
+  assert.equal(errorText(new ApiError(400, "VALIDATION_FAILED", "Dữ liệu không hợp lệ.", [{ field: "email", message: "Email không hợp lệ." }, { field: "role", message: "Vai trò không hợp lệ." }])), "Email không hợp lệ. Vai trò không hợp lệ.");
+  assert.equal(errorText(new ApiError(409, "EMAIL_TAKEN", "Email đã được dùng cho tài khoản khác.")), "Email đã được dùng cho tài khoản khác.");
+  assert.equal(errorText(null), undefined);
+});

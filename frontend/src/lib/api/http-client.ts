@@ -40,3 +40,9 @@ export const request = async <T>(path: string, { method = "GET", body, fetcher =
   }
   return payload as T;
 };
+
+export const errorText = (error: unknown) => {
+  if (!error) return undefined;
+  if (error instanceof ApiError && error.details.length > 0) return error.details.map((detail) => detail.message).join(" ");
+  return error instanceof Error ? error.message : GENERIC_MESSAGE;
+};
